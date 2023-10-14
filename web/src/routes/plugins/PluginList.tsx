@@ -12,26 +12,28 @@ const PluginList = () => {
     (state) => state.setDiscoverPlugins
   );
 
-  const fetchData = useCallback(async () => {
-    if (discoverPlugins.length > 0) {
-      setPlugins(discoverPlugins);
-      return;
-    }
-    try {
-      setPlugins([]);
-      const loadedPlugins = await loadPlugins(!showFlagged);
-      setDiscoverPlugins(loadedPlugins);
-      setPlugins(loadedPlugins);
-    } catch (e) {
-      console.warn(e);
-    }
-  }, [showFlagged]);
-
   useEffect(() => {
+    const fetchData = async () => {
+      console.log("fetching data");
+      console.log("discoverPlugins", discoverPlugins);
+      if (discoverPlugins?.length > 0) {
+        setPlugins(discoverPlugins);
+        return;
+      }
+      try {
+        const loadedPlugins = await loadPlugins(!showFlagged);
+        console.log("loadedPlugins", loadedPlugins);
+        setDiscoverPlugins(loadedPlugins);
+        setPlugins(loadedPlugins);
+      } catch (e) {
+        console.warn(e);
+      }
+    };
     fetchData();
-  }, [fetchData]);
+  }, []);
   return (
     <div className="w-2/3 py-8">
+      <div>Plugin Lists</div>
       <div className="w-full w-full grid grid-cols-3 gap-8 items-stretch ">
         {plugins.map((plugin) => (
           <Plugin address={plugin} />
