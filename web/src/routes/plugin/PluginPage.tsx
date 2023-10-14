@@ -10,7 +10,10 @@ const PluginPage = () => {
   const { details } = usePluginDetails(pluginAddress);
   const [enabled, setEnabled] = React.useState<undefined | boolean>(undefined);
 
+  console.log("enabled", enabled);
+
   React.useEffect(() => {
+    console.log("details", details);
     setEnabled(details?.enabled);
   }, [details?.enabled]);
 
@@ -46,12 +49,12 @@ const PluginPage = () => {
         <button
           disabled={enabled === undefined}
           className={clsx(
-            "rounded-full shrink-0 ml-8 cursor-pointer px-8 text-sm py-2 text-p-bg font-bold hover:bg-p-h/60 transition-all duration-300",
+            "rounded-full shrink-0 ml-8 px-8 text-sm py-2 text-p-bg font-bold hover:bg-p-h/60 transition-all duration-300",
             enabled === undefined
               ? "bg-p-h/60 cursor-not-allowed"
               : enabled
-              ? "bg-red-500"
-              : "bg-p-h"
+              ? "bg-red-500 cursor-pointer"
+              : "bg-p-h cursor-pointer"
           )}
           onClick={handleToggle}
         >
