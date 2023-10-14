@@ -6,7 +6,7 @@ import PluginList from "./routes/plugins/PluginList";
 import { RelayPlugin } from "./routes/samples/relay/RelayPlugin";
 import Header from "./components/Header";
 // import browserroute and routes from react-router-dom
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import InstalledExtensiosn from "./routes/installed/InstalledExtensiosn";
 import PluginPage from "./routes/plugin/PluginPage";
 
