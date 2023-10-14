@@ -14,8 +14,6 @@ export const Plugin: FunctionComponent<PluginProps> = ({ address }) => {
   // console.log("details", details, "address", address, "blocky");
   const blocky = blockies.create({ seed: address }).toDataURL();
 
-  console.log("details", details);
-
   return (
     <Link
       to={{

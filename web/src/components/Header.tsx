@@ -1,13 +1,14 @@
 import React from "react";
 import clsx from "clsx";
 import { Link, useLocation } from "react-router-dom";
+import { publicFileUrl } from "../logic/utils";
 const Header = () => {
   const { pathname } = useLocation();
   return (
     <header className="fixed top-0 left-0 right-0 py-3 px-32 backdrop-blur-sm flex flex-row justify-between items-center">
       <div className="flex flex-row items-center space-x-8">
         <div className="flex flex-row items-center">
-          <img src="/logo.png" alt="logo" className="h-8" />
+          <img src={publicFileUrl("/logo.png")} alt="logo" className="h-8" />
           <span className="text-2xl font-bold ml-4">Safe Extensions Store</span>
         </div>
 

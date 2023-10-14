@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { usePluginDetails } from "../../hooks/usePluginDetails";
 import { disablePlugin, enablePlugin } from "../../logic/plugins";
 import clsx from "clsx";
+import { publicFileUrl } from "../../logic/utils";
 
 const PluginPage = () => {
   const { pluginAddress } = useParams();
@@ -34,7 +35,10 @@ const PluginPage = () => {
     <div className="w-2/3 py-8">
       <div className="flex flex-row items-center justify-between">
         <div className="flex flex-row items-center space-x-8">
-          <img src="/logo.png" className="w-12 h-12 rounded-full shadow-sm" />
+          <img
+            src={publicFileUrl("/logo.png")}
+            className="w-12 h-12 rounded-full shadow-sm"
+          />
           <div className="text-3xl font-semibold word-wrap">
             {details.metadata.name}
           </div>

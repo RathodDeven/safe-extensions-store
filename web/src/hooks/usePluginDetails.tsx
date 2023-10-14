@@ -21,7 +21,7 @@ export const usePluginDetails = (
     } catch (e) {
       console.warn(e);
     }
-  }, [address, addPlugin, setDetails]);
+  }, [address]);
 
   React.useEffect(() => {
     if (!address) return;
@@ -30,7 +30,7 @@ export const usePluginDetails = (
       return;
     }
     fetchData();
-  }, [address, plugins, fetchData, setDetails]);
+  }, [address]);
 
   return {
     details,

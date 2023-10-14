@@ -13,7 +13,7 @@ const PluginList = () => {
   );
 
   const fetchData = useCallback(async () => {
-    if (discoverPlugins) {
+    if (discoverPlugins.length > 0) {
       setPlugins(discoverPlugins);
       return;
     }
