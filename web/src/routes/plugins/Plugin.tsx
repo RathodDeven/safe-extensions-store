@@ -1,29 +1,12 @@
 import { FunctionComponent, useCallback, useEffect, useState } from "react";
-import WarningIcon from "@mui/icons-material/Warning";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import * as blockies from "blockies-ts";
 import "./Plugins.css";
-import { PluginMetadata } from "../../logic/metadata";
 import {
   PluginDetails,
   disablePlugin,
   enablePlugin,
   loadPluginDetails,
 } from "../../logic/plugins";
-import { openSafeApp } from "../../logic/safeapp";
-import { Button, Card, Tooltip } from "@mui/material";
-
-type PluginMetaProps = {
-  metadata: PluginMetadata;
-};
-
-const PluginMeta: FunctionComponent<PluginMetaProps> = ({ metadata }) => {
-  return (
-    <>
-      {metadata.name} - {metadata.version}
-    </>
-  );
-};
 
 type PluginProps = {
   address: string;
@@ -32,7 +15,7 @@ type PluginProps = {
 export const Plugin: FunctionComponent<PluginProps> = ({ address }) => {
   const [details, setDetails] = useState<PluginDetails | undefined>(undefined);
 
-  console.log("details", details, "address", address, "blocky");
+  // console.log("details", details, "address", address, "blocky");
   const blocky = blockies.create({ seed: address }).toDataURL();
   useEffect(() => {
     const fetchData = async () => {
@@ -45,6 +28,8 @@ export const Plugin: FunctionComponent<PluginProps> = ({ address }) => {
     fetchData();
   }, [address]);
 
+  console.log("details", details);
+
   const handleToggle = useCallback(async () => {
     if (details?.enabled === undefined) return;
     try {
@@ -54,32 +39,23 @@ export const Plugin: FunctionComponent<PluginProps> = ({ address }) => {
       console.warn(e);
     }
   }, [details]);
+
   return (
-    <Card className="Plugin">
-      <Tooltip title={address}>
-        <img className="AddressIcon" src={blocky} />
-      </Tooltip>
-      <div className="Plugin-title">
-        {!details ? (
-          "Loading Metadata"
-        ) : (
-          <PluginMeta metadata={details.metadata} />
-        )}
+    <div className="rounded-md hover:border-p-h cursor-pointer shadow-xl border-s-text/20 border-[1px] transition-colors duration-300 ease-in-out p-6 flex flex-col">
+      <img
+        src={blocky}
+        alt="blocky"
+        className="w-12 h-12 rounded-full shadow-sm mb-4"
+      />
+      <div className="flex flex-col">
+        <div className="text-lg font-semibold line-clamp-1">
+          {details?.metadata?.name}
+        </div>
       </div>
-      {details?.metadata?.requiresRootAccess == true && (
-        <WarningIcon color="warning" />
-      )}
-      {details?.enabled != undefined && (
-        <Button className="Plugin-toggle" onClick={handleToggle}>
-          {details?.enabled ? "Disable" : "Enable"}
-        </Button>
-      )}
-      {(details?.metadata?.appUrl?.length ?? 0) > 0 && (
-        <OpenInNewIcon
-          className="Plugin-link"
-          onClick={() => openSafeApp(details?.metadata?.appUrl!!)}
-        />
-      )}
-    </Card>
+
+      <div className="line-clamp-3 text-s-text text-sm my-2 leading-relaxed">
+        {details?.metadata?.description}
+      </div>
+    </div>
   );
 };

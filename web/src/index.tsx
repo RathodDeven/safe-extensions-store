@@ -1,38 +1,31 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import Home from './routes/home/Home';
-import reportWebVitals from './reportWebVitals';
-import {
-  createHashRouter,
-  RouterProvider,
-} from "react-router-dom";
-import PluginList from './routes/plugins/PluginList';
-import { RelayPlugin } from './routes/samples/relay/RelayPlugin';
-
-const router = createHashRouter([
-  {
-    path: "/",
-    index: true,
-    element: <Home />,
-    errorElement: <Home />,
-  },
-  {
-    path: "/plugins",
-    element: <PluginList />,
-  },
-  {
-    path: "/relay/:pluginAddress",
-    element: <RelayPlugin />,
-  },
-]);
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import reportWebVitals from "./reportWebVitals";
+import PluginList from "./routes/plugins/PluginList";
+import { RelayPlugin } from "./routes/samples/relay/RelayPlugin";
+import Header from "./components/Header";
+// import browserroute and routes from react-router-dom
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import InstalledExtensiosn from "./routes/installed/InstalledExtensiosn";
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+  document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <Router>
+      <div className="w-screen h-screen overflow-auto bg-p-bg text-p-text hide-scrollbar">
+        <Header />
+        <div className="p-16 flex flex-row justify-center w-full">
+          <Routes>
+            <Route path="/" Component={PluginList} />
+            <Route path="/relay/:pluginAddress" Component={RelayPlugin} />
+            <Route path="/installed" Component={InstalledExtensiosn} />
+          </Routes>
+        </div>
+      </div>
+    </Router>
   </React.StrictMode>
 );
 
