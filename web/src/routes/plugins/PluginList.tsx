@@ -2,14 +2,26 @@ import { useCallback, useEffect, useState } from "react";
 import "./Plugins.css";
 import { loadPlugins } from "../../logic/plugins";
 import { Plugin } from "./Plugin";
+import { usePluginStore } from "../../logic/store/pluginStore";
 
 const PluginList = () => {
   const [showFlagged, setFilterFlagged] = useState<boolean>(false);
   const [plugins, setPlugins] = useState<string[]>([]);
+  const discoverPlugins = usePluginStore((state) => state.discoverPlugins);
+  const setDiscoverPlugins = usePluginStore(
+    (state) => state.setDiscoverPlugins
+  );
+
   const fetchData = useCallback(async () => {
+    if (discoverPlugins) {
+      setPlugins(discoverPlugins);
+      return;
+    }
     try {
       setPlugins([]);
-      setPlugins(await loadPlugins(!showFlagged));
+      const loadedPlugins = await loadPlugins(!showFlagged);
+      setDiscoverPlugins(loadedPlugins);
+      setPlugins(loadedPlugins);
     } catch (e) {
       console.warn(e);
     }

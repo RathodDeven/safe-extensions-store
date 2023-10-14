@@ -8,6 +8,7 @@ import Header from "./components/Header";
 // import browserroute and routes from react-router-dom
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import InstalledExtensiosn from "./routes/installed/InstalledExtensiosn";
+import PluginPage from "./routes/plugin/PluginPage";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -20,6 +21,7 @@ root.render(
         <div className="p-16 flex flex-row justify-center w-full">
           <Routes>
             <Route path="/" Component={PluginList} />
+            <Route path="/plugin/:pluginAddress" Component={PluginPage} />
             <Route path="/relay/:pluginAddress" Component={RelayPlugin} />
             <Route path="/installed" Component={InstalledExtensiosn} />
           </Routes>

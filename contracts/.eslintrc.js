@@ -12,5 +12,7 @@ module.exports = {
         sourceType: "module",
     },
     plugins: ["@typescript-eslint", "no-only-tests"],
-    rules: {},
+    rules: {
+        "react-hooks/exhaustive-deps": "off",
+    },
 };

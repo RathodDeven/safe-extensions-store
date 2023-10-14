@@ -14,8 +14,8 @@ const Header = () => {
         <Link
           to="/"
           className={clsx(
-            "text-lg font-medium",
-            pathname === "/" && "text-s-text"
+            "text-lg font-medium ",
+            pathname === "/" ? "text-p-text" : "text-s-text"
           )}
         >
           <div>Discover</div>
@@ -24,8 +24,8 @@ const Header = () => {
         <Link
           to="/installed"
           className={clsx(
-            "text-lg font-medium",
-            pathname === "/installed" && "text-s-text"
+            "text-lg font-medium ",
+            pathname === "/installed" ? "text-p-text" : "text-s-text"
           )}
         >
           <div>Installed</div>
