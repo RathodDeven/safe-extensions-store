@@ -46,13 +46,14 @@ const PluginPage = () => {
         <button
           disabled={enabled === undefined}
           className={clsx(
-            "rounded-full shrink-0 ml-8 cursor-pointer px-8 text-sm py-2 text-p-bg font-bold hover:bg-p-h/70 transition-all duration-300",
+            "rounded-full shrink-0 ml-8 cursor-pointer px-8 text-sm py-2 text-p-bg font-bold hover:bg-p-h/60 transition-all duration-300",
             enabled === undefined
-              ? "bg-p-h/70 cursor-not-allowed"
+              ? "bg-p-h/60 cursor-not-allowed"
               : enabled
               ? "bg-red-500"
               : "bg-p-h"
           )}
+          onClick={handleToggle}
         >
           {enabled ? "Remove from Safe" : "Add to Safe"}
         </button>
