@@ -21,6 +21,9 @@ struct PluginMetadata {
     uint8 requiresPermissions;
     string iconUrl;
     string appUrl;
+    string description;
+    string category;
+    string[] ssUrls;
 }
 
 library PluginMetadataOps {
@@ -29,17 +32,32 @@ library PluginMetadataOps {
             abi.encodePacked(
                 uint8(0x00), // Format
                 uint8(0x00), // Format version
-                abi.encode(data.name, data.version, data.requiresPermissions, data.iconUrl, data.appUrl) // Plugin Metadata
+                abi.encode(
+                    data.name,
+                    data.version,
+                    data.requiresPermissions,
+                    data.iconUrl,
+                    data.appUrl,
+                    data.description,
+                    data.category,
+                    data.ssUrls
+                ) // Plugin Metadata
             );
     }
 
     function decode(bytes calldata data) internal pure returns (PluginMetadata memory) {
         require(bytes16(data[0:2]) == bytes16(0x0000), "Unsupported format or format version");
-        (string memory name, string memory version, uint8 requiresPermissions, string memory iconUrl, string memory appUrl) = abi.decode(
-            data[2:],
-            (string, string, uint8, string, string)
-        );
-        return PluginMetadata(name, version, requiresPermissions, iconUrl, appUrl);
+        (
+            string memory name,
+            string memory version,
+            uint8 requiresPermissions,
+            string memory iconUrl,
+            string memory appUrl,
+            string memory description,
+            string memory category,
+            string[] memory ssUrls
+        ) = abi.decode(data[2:], (string, string, uint8, string, string, string, string, string[]));
+        return PluginMetadata(name, version, requiresPermissions, iconUrl, appUrl, description, category, ssUrls);
     }
 }
 

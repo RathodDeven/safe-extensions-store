@@ -29,11 +29,16 @@ contract WhitelistPlugin is BasePluginWithEventMetadata {
     error AddressNotWhiteListed(address account);
     error CallerIsNotOwner(address safe, address caller);
 
-    constructor()
-        BasePluginWithEventMetadata(
-            PluginMetadata({name: "Whitelist Plugin", version: "1.0.0", requiresPermissions: 3, iconUrl: "", appUrl: ""})
-        )
-    {}
+    constructor(
+        string memory name,
+        string memory version,
+        uint8 requiredPermissions,
+        string memory iconUrl,
+        string memory appUrl,
+        string memory description,
+        string memory category,
+        string[] memory ssUrls
+    ) BasePluginWithEventMetadata(PluginMetadata(name, version, requiredPermissions, iconUrl, appUrl, description, category, ssUrls)) {}
 
     /**
      * @notice Executes a Safe transaction if the caller is whitelisted for the given Safe account.
