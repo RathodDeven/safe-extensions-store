@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: LGPL-3.0-only
 pragma solidity ^0.8.18;
 
-import {ISafeProtocolPlugin} from "@safe-global/safe-core-protocol/contracts/interfaces/Integrations.sol";
+import {ISafeProtocolPlugin} from "./interfaces/Modules.sol";
 import {IERC165} from "@openzeppelin/contracts/utils/introspection/IERC165.sol";
 
 enum MetadataProviderType {
@@ -18,7 +18,7 @@ interface IMetadataProvider {
 struct PluginMetadata {
     string name;
     string version;
-    bool requiresRootAccess;
+    uint8 requiresPermissions;
     string iconUrl;
     string appUrl;
 }
@@ -29,17 +29,17 @@ library PluginMetadataOps {
             abi.encodePacked(
                 uint8(0x00), // Format
                 uint8(0x00), // Format version
-                abi.encode(data.name, data.version, data.requiresRootAccess, data.iconUrl, data.appUrl) // Plugin Metadata
+                abi.encode(data.name, data.version, data.requiresPermissions, data.iconUrl, data.appUrl) // Plugin Metadata
             );
     }
 
     function decode(bytes calldata data) internal pure returns (PluginMetadata memory) {
         require(bytes16(data[0:2]) == bytes16(0x0000), "Unsupported format or format version");
-        (string memory name, string memory version, bool requiresRootAccess, string memory iconUrl, string memory appUrl) = abi.decode(
+        (string memory name, string memory version, uint8 requiresPermissions, string memory iconUrl, string memory appUrl) = abi.decode(
             data[2:],
-            (string, string, bool, string, string)
+            (string, string, uint8, string, string)
         );
-        return PluginMetadata(name, version, requiresRootAccess, iconUrl, appUrl);
+        return PluginMetadata(name, version, requiresPermissions, iconUrl, appUrl);
     }
 }
 
@@ -48,17 +48,17 @@ abstract contract BasePlugin is ISafeProtocolPlugin {
 
     string public name;
     string public version;
-    bool public immutable requiresRootAccess;
+    uint8 public immutable requiresPermissions;
     bytes32 public immutable metadataHash;
 
     constructor(PluginMetadata memory metadata) {
         name = metadata.name;
         version = metadata.version;
-        requiresRootAccess = metadata.requiresRootAccess;
+        requiresPermissions = metadata.requiresPermissions;
         metadataHash = keccak256(metadata.encode());
     }
 
-    function supportsInterface(bytes4 interfaceId) external view override returns (bool) {
+    function supportsInterface(bytes4 interfaceId) external pure override returns (bool) {
         return interfaceId == type(ISafeProtocolPlugin).interfaceId || interfaceId == type(IERC165).interfaceId;
     }
 }
