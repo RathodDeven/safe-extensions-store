@@ -86,9 +86,4 @@ contract WhitelistPlugin is BasePluginWithEventMetadata {
         emit AddressRemovedFromWhitelist(account);
     }
 
-    // function requiresPermissions() external view returns (uint8 permissions) {
-    //     // 3 - EXECUTE_CALL + CALL_TO_SELF
-    //     // Return the required permissions for the plugin
-    //     return 3; // Assuming no permissions are required
-    // }
 }

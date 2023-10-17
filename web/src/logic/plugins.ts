@@ -17,6 +17,7 @@ export const loadPluginDetails = async (
 ): Promise<PluginDetails> => {
   const plugin = await getPlugin(pluginAddress);
   const metadata = await loadPluginMetadata(plugin);
+  console.log("metadata", metadata);
   if (!(await isConnectedToSafe())) return { metadata };
   const enabled = await isPluginEnabled(pluginAddress);
   return { metadata, enabled };
@@ -27,21 +28,23 @@ export const loadPlugins = async (
 ): Promise<string[]> => {
   const registry = await getRegistry();
   const addedEvents = (await registry.queryFilter(
-    registry.filters.IntegrationAdded
+    registry.filters.ModuleAdded,
+    11130728
   )) as EventLog[];
-  const addedIntegrations = addedEvents.map(
-    (event: EventLog) => event.args.integration
-  );
-  if (!filterFlagged) return addedIntegrations;
+
+  const addedModules = addedEvents.map((event: EventLog) => event.args.module);
+
+  if (!filterFlagged) return addedModules;
   const flaggedEvents = (await registry.queryFilter(
-    registry.filters.IntegrationFlagged
+    registry.filters.ModuleFlagged,
+    11130728
   )) as EventLog[];
-  const flaggedIntegrations = flaggedEvents.map(
-    (event: EventLog) => event.args.integration
+
+  const flaggedModules = flaggedEvents.map(
+    (event: EventLog) => event.args.module
   );
-  return addedIntegrations.filter(
-    (integration) => flaggedIntegrations.indexOf(integration) < 0
-  );
+
+  return addedModules.filter((module) => flaggedModules.indexOf(module) < 0);
 };
 
 export const isPluginEnabled = async (plugin: string) => {
@@ -66,22 +69,18 @@ export const loadEnabledPlugins = async (): Promise<string[]> => {
 
 const buildEnablePlugin = async (
   plugin: string,
-  requiresRootAccess: boolean
+  permissions: BigInt
 ): Promise<BaseTransaction> => {
   const manager = await getManager();
   return {
     to: await manager.getAddress(),
     value: "0",
-    data: (
-      await manager.enablePlugin.populateTransaction(plugin, requiresRootAccess)
-    ).data,
+    data: (await manager.enablePlugin.populateTransaction(plugin, permissions))
+      .data,
   };
 };
 
-export const enablePlugin = async (
-  plugin: string,
-  requiresRootAccess: boolean
-) => {
+export const enablePlugin = async (plugin: string, permissions: BigInt) => {
   if (!(await isConnectedToSafe())) throw Error("Not connected to a Safe");
   const manager = await getManager();
   const managerAddress = await manager.getAddress();
@@ -91,7 +90,7 @@ export const enablePlugin = async (
     txs.push(await buildEnableModule(info.safeAddress, managerAddress));
   }
   if (!(await isPluginEnabled(plugin))) {
-    txs.push(await buildEnablePlugin(plugin, requiresRootAccess));
+    txs.push(await buildEnablePlugin(plugin, permissions));
   }
   if (txs.length === 0) return;
   await submitTxs(txs);

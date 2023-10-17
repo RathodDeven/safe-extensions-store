@@ -24,7 +24,7 @@ const PluginPage = () => {
         await disablePlugin(pluginAddress);
         setEnabled(false);
       } else {
-        await enablePlugin(pluginAddress, details.metadata.requiresRootAccess);
+        await enablePlugin(pluginAddress, details.metadata.requiredPermissions);
         setEnabled(true);
       }
     } catch (e) {

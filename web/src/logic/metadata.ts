@@ -12,10 +12,12 @@ import { getProvider } from "./web3";
 export interface PluginMetadata {
   name: string;
   version: string;
-  requiresRootAccess: boolean;
+  requiredPermissions: BigInt;
   iconUrl: string;
   appUrl: string;
-  description?: string;
+  description: string;
+  category: string;
+  ssUrls: string[];
 }
 
 // const ProviderType_IPFS = BigInt(0);
@@ -29,9 +31,12 @@ const MetadataEvent: string[] = [
 const PluginMetadataType: string[] = [
   "string name",
   "string version",
-  "bool requiresRootAccess",
+  "uint8 requiresPermissions",
   "string iconUrl",
   "string appUrl",
+  "string description",
+  "string category",
+  "string[] ssUrls",
 ];
 
 const loadPluginMetadataFromContract = async (
@@ -49,12 +54,12 @@ const loadPluginMetadataFromEvent = async (
   const web3Provider = await getProvider();
   const eventInterface = new Interface(MetadataEvent);
   const events = await web3Provider.getLogs({
-    fromBlock: "earliest",
+    fromBlock: 11162991,
     toBlock: "latest",
     address: provider,
     topics: eventInterface.encodeFilterTopics("Metadata", [metadataHash]),
   });
-  if (events.length == 0) throw Error("Metadata not found");
+  if (events.length === 0) throw Error("Metadata not found");
   const metadataEvent = events[events.length - 1];
   const decodedEvent = eventInterface.decodeEventLog(
     "Metadata",
@@ -111,16 +116,18 @@ export const decodePluginMetadata = (
   return {
     name: decoded[0],
     version: decoded[1],
-    requiresRootAccess: decoded[2],
+    requiredPermissions: decoded[2],
     iconUrl: decoded[3],
     appUrl: parseAppUrl(decoded[4], pluginAddress),
+    description: decoded[5],
+    category: decoded[6],
+    ssUrls: decoded[7],
   };
 };
 
 export const loadPluginMetadata = async (
   plugin: Contract
 ): Promise<PluginMetadata> => {
-  console.log({ plugin });
   const metadataHash = await plugin.metadataHash();
   const metadata = await loadRawMetadata(plugin, metadataHash);
   if (metadataHash !== keccak256(metadata))
