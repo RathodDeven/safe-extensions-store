@@ -36,7 +36,7 @@ const PluginList = () => {
       <div>Plugin Lists</div>
       <div className="w-full w-full grid grid-cols-3 gap-8 items-stretch ">
         {plugins.map((plugin) => (
-          <Plugin address={plugin} />
+          <Plugin key={plugin} address={plugin} />
         ))}
       </div>
     </div>

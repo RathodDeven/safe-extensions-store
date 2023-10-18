@@ -1,7 +1,12 @@
 import { ZeroAddress, EventLog } from "ethers";
 import { BaseTransaction } from "@safe-global/safe-apps-sdk";
 import { PluginMetadata, loadPluginMetadata } from "./metadata";
-import { getManager, getPlugin, getRegistry } from "./protocol";
+import {
+  getManager,
+  getPlugin,
+  getRegistry,
+  getRegistryFromJsonProvider,
+} from "./protocol";
 import { getSafeInfo, isConnectedToSafe, submitTxs } from "./safeapp";
 import { isModuleEnabled, buildEnableModule } from "./safe";
 
@@ -26,10 +31,12 @@ export const loadPluginDetails = async (
 export const loadPlugins = async (
   filterFlagged: boolean = true
 ): Promise<string[]> => {
-  const registry = await getRegistry();
+  // const registry = await getRegistry();
+  const registry = await getRegistryFromJsonProvider();
   const addedEvents = (await registry.queryFilter(
     registry.filters.ModuleAdded,
-    11130728
+    11130728,
+    "latest"
   )) as EventLog[];
 
   const addedModules = addedEvents.map((event: EventLog) => event.args.module);
