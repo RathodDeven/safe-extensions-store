@@ -100,9 +100,9 @@ export const enablePlugin = async (plugin: string, permissions: BigInt) => {
   if (!(await isModuleEnabled(info.safeAddress, managerAddress))) {
     txs.push(await buildEnableModule(info.safeAddress, managerAddress));
   }
-  if (!(await isPluginEnabled(plugin))) {
-    txs.push(await buildEnablePlugin(plugin, permissions));
-  }
+  // if (!(await isPluginEnabled(plugin))) {
+  //   txs.push(await buildEnablePlugin(plugin, permissions));
+  // }
   if (txs.length === 0) return;
   await submitTxs(txs);
 };
