@@ -33,7 +33,8 @@ export const getRegistry = async () => {
 };
 
 export const getPlugin = async (pluginAddress: string) => {
-  const provider = await getProvider();
+  // const provider = await getProvider();
+  const provider = await getJsonProvider();
   console.log(new Interface(PLUGIN_ABI));
   return new ethers.Contract(pluginAddress, PLUGIN_ABI, provider);
 };
