@@ -2742,7 +2742,7 @@ export const deployedContracts = {
       chainId: "5",
       contracts: {
         TestSafeProtocolManagerOld: {
-          address: "0x24D2AF590292aB45DE1bdbb4f61958a80F80b8d5",
+          address: "0x274ad6d2C56a60B0cE445972435B598DAfEC0c47",
           abi: [
             {
               inputs: [],
