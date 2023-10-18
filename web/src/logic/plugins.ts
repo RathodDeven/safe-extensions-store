@@ -5,7 +5,7 @@ import {
   getManager,
   getPlugin,
   getRegistry,
-  getRegistryFromJsonProvider,
+  // getRegistryFromJsonProvider,
 } from "./protocol";
 import { getSafeInfo, isConnectedToSafe, submitTxs } from "./safeapp";
 import { isModuleEnabled, buildEnableModule } from "./safe";
@@ -31,8 +31,8 @@ export const loadPluginDetails = async (
 export const loadPlugins = async (
   filterFlagged: boolean = true
 ): Promise<string[]> => {
-  // const registry = await getRegistry();
-  const registry = await getRegistryFromJsonProvider();
+  const registry = await getRegistry();
+  // const registry = await getRegistryFromJsonProvider();
   const addedEvents = (await registry.queryFilter(
     registry.filters.ModuleAdded,
     11130728,
