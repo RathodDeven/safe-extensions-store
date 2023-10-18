@@ -3,6 +3,7 @@ import "./Plugins.css";
 import { loadPlugins } from "../../logic/plugins";
 import { Plugin } from "./Plugin";
 import { usePluginStore } from "../../logic/store/pluginStore";
+import { getManager } from "../../logic/protocol";
 
 const PluginList = () => {
   const [showFlagged, setFilterFlagged] = useState<boolean>(false);
@@ -16,6 +17,9 @@ const PluginList = () => {
     const fetchData = async () => {
       console.log("fetching data");
       console.log("discoverPlugins", discoverPlugins);
+
+      const manager = await getManager();
+      console.log("manager", await manager.getAddress());
       if (discoverPlugins?.length > 0) {
         setPlugins(discoverPlugins);
         return;

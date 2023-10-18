@@ -2738,11 +2738,11 @@ export const deployedContracts = {
   // base-goerli
   "84531": [
     {
-      name: "goerli",
+      name: "base-goerli",
       chainId: "5",
       contracts: {
         TestSafeProtocolManagerOld: {
-          address: "0xea3950A37fEdEEc3B52554e3bc1521c7D5E80cD9",
+          address: "0x24D2AF590292aB45DE1bdbb4f61958a80F80b8d5",
           abi: [
             {
               inputs: [],

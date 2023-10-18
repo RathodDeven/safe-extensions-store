@@ -83,13 +83,16 @@ const buildEnablePlugin = async (
   requiresRootAccess: boolean
 ): Promise<BaseTransaction> => {
   const manager = await getManager();
-  return {
+  const tx = {
     to: await manager.getAddress(),
     value: "0",
     data: (
       await manager.enablePlugin.populateTransaction(plugin, requiresRootAccess)
     ).data,
   };
+
+  console.log("buildEnablePlugin tx", tx);
+  return tx;
 };
 
 export const enablePlugin = async (
@@ -107,7 +110,7 @@ export const enablePlugin = async (
   if (!(await isPluginEnabled(plugin))) {
     txs.push(await buildEnablePlugin(plugin, requiresRootAccess));
   }
-  if (txs.length == 0) return;
+  if (txs.length === 0) return;
   await submitTxs(txs);
 };
 
