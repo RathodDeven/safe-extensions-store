@@ -18,13 +18,14 @@ const PluginPage = () => {
   }, [details?.enabled]);
 
   const handleToggle = React.useCallback(async () => {
+    console.log("handleToggle details", details);
     if (enabled === undefined || !pluginAddress || !details) return;
     try {
       if (enabled) {
         await disablePlugin(pluginAddress);
         setEnabled(false);
       } else {
-        await enablePlugin(pluginAddress, details.metadata.requiredPermissions);
+        await enablePlugin(pluginAddress, details.metadata.requiresRootAccess);
         setEnabled(true);
       }
     } catch (e) {
@@ -47,7 +48,6 @@ const PluginPage = () => {
           </div>
         </div>
         <button
-          disabled={enabled === undefined}
           className={clsx(
             "rounded-full shrink-0 ml-8 px-8 text-sm py-2 text-p-bg font-bold hover:bg-p-h/60 transition-all duration-300",
             enabled === undefined
@@ -56,6 +56,7 @@ const PluginPage = () => {
               ? "bg-red-500 cursor-pointer"
               : "bg-p-h cursor-pointer"
           )}
+          disabled={enabled === undefined}
           onClick={handleToggle}
         >
           {enabled ? "Remove from Safe" : "Add to Safe"}

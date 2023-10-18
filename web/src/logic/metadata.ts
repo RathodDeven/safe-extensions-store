@@ -12,7 +12,7 @@ import { getProvider } from "./web3";
 export interface PluginMetadata {
   name: string;
   version: string;
-  requiredPermissions: BigInt;
+  requiresRootAccess: boolean;
   iconUrl: string;
   appUrl: string;
   description: string;
@@ -30,7 +30,7 @@ const MetadataEvent: string[] = [
 const PluginMetadataType: string[] = [
   "string name",
   "string version",
-  "uint8 requiresPermissions",
+  "bool requiresRootAccess",
   "string iconUrl",
   "string appUrl",
   "string description",
@@ -116,7 +116,7 @@ export const decodePluginMetadata = (
   return {
     name: decoded[0],
     version: decoded[1],
-    requiredPermissions: decoded[2],
+    requiresRootAccess: decoded[2],
     iconUrl: decoded[3],
     appUrl: parseAppUrl(decoded[4], pluginAddress),
     description: decoded[5],

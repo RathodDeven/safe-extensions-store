@@ -14,7 +14,7 @@ const waitAndError = <T>(timeout: number) =>
 let cachedSafeInfo: SafeInfo | undefined = undefined;
 
 export const getSafeInfo = async () => {
-  if (cachedSafeInfo != undefined) return cachedSafeInfo;
+  if (cachedSafeInfo !== undefined) return cachedSafeInfo;
   cachedSafeInfo = await safeAppsSDK.safe.getInfo();
   return cachedSafeInfo;
 };

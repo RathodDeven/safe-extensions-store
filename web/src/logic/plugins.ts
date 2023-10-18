@@ -80,18 +80,22 @@ export const loadEnabledPlugins = async (): Promise<string[]> => {
 
 const buildEnablePlugin = async (
   plugin: string,
-  permissions: BigInt
+  requiresRootAccess: boolean
 ): Promise<BaseTransaction> => {
   const manager = await getManager();
   return {
     to: await manager.getAddress(),
     value: "0",
-    data: (await manager.enablePlugin.populateTransaction(plugin, permissions))
-      .data,
+    data: (
+      await manager.enablePlugin.populateTransaction(plugin, requiresRootAccess)
+    ).data,
   };
 };
 
-export const enablePlugin = async (plugin: string, permissions: BigInt) => {
+export const enablePlugin = async (
+  plugin: string,
+  requiresRootAccess: boolean
+) => {
   if (!(await isConnectedToSafe())) throw Error("Not connected to a Safe");
   const manager = await getManager();
   const managerAddress = await manager.getAddress();
@@ -100,10 +104,10 @@ export const enablePlugin = async (plugin: string, permissions: BigInt) => {
   if (!(await isModuleEnabled(info.safeAddress, managerAddress))) {
     txs.push(await buildEnableModule(info.safeAddress, managerAddress));
   }
-  // if (!(await isPluginEnabled(plugin))) {
-  //   txs.push(await buildEnablePlugin(plugin, permissions));
-  // }
-  if (txs.length === 0) return;
+  if (!(await isPluginEnabled(plugin))) {
+    txs.push(await buildEnablePlugin(plugin, requiresRootAccess));
+  }
+  if (txs.length == 0) return;
   await submitTxs(txs);
 };
 
