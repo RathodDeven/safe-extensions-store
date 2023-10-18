@@ -17,7 +17,6 @@ export interface PluginMetadata {
   appUrl: string;
   description: string;
   category: string;
-  ssUrls: string[];
 }
 
 // const ProviderType_IPFS = BigInt(0);
@@ -36,7 +35,6 @@ const PluginMetadataType: string[] = [
   "string appUrl",
   "string description",
   "string category",
-  "string[] ssUrls",
 ];
 
 const loadPluginMetadataFromContract = async (
@@ -113,6 +111,8 @@ export const decodePluginMetadata = (
     PluginMetadataType,
     "0x" + metadata
   );
+
+  console.log("decoded", decoded);
   return {
     name: decoded[0],
     version: decoded[1],
@@ -121,7 +121,6 @@ export const decodePluginMetadata = (
     appUrl: parseAppUrl(decoded[4], pluginAddress),
     description: decoded[5],
     category: decoded[6],
-    ssUrls: decoded[7],
   };
 };
 

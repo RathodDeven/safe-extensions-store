@@ -34,21 +34,25 @@ export const loadPlugins = async (
   const registry = await getRegistry();
   // const registry = await getRegistryFromJsonProvider();
   const addedEvents = (await registry.queryFilter(
-    registry.filters.ModuleAdded,
-    11130728,
+    registry.filters.IntegrationAdded,
+    11218388,
     "latest"
   )) as EventLog[];
 
-  const addedModules = addedEvents.map((event: EventLog) => event.args.module);
+  console.log("addedEvents", addedEvents);
+
+  const addedModules = addedEvents.map(
+    (event: EventLog) => event.args.integration
+  );
 
   if (!filterFlagged) return addedModules;
   const flaggedEvents = (await registry.queryFilter(
-    registry.filters.ModuleFlagged,
+    registry.filters.IntegrationFlagged,
     11130728
   )) as EventLog[];
 
   const flaggedModules = flaggedEvents.map(
-    (event: EventLog) => event.args.module
+    (event: EventLog) => event.args.integration
   );
 
   return addedModules.filter((module) => flaggedModules.indexOf(module) < 0);
