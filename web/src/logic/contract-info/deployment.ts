@@ -2742,7 +2742,7 @@ export const deployedContracts = {
       chainId: "5",
       contracts: {
         TestSafeProtocolManagerOld: {
-          address: "0x274ad6d2C56a60B0cE445972435B598DAfEC0c47",
+          address: "0xF47c6040536D1A1584e4BEe580d65014E2fC55fE",
           abi: [
             {
               inputs: [],
@@ -3109,11 +3109,6 @@ export const deployedContracts = {
               type: "error",
             },
             {
-              inputs: [],
-              name: "InvalidCalldataLength",
-              type: "error",
-            },
-            {
               inputs: [
                 {
                   internalType: "address",
@@ -3133,17 +3128,6 @@ export const deployedContracts = {
                 },
               ],
               name: "InvalidPrevPluginAddress",
-              type: "error",
-            },
-            {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "sender",
-                  type: "address",
-                },
-              ],
-              name: "InvalidSender",
               type: "error",
             },
             {
@@ -3259,6 +3243,19 @@ export const deployedContracts = {
               ],
               name: "RootAccessActionExecutionFailed",
               type: "error",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "hooks",
+                  type: "address",
+                },
+              ],
+              name: "setHooks",
+              outputs: [],
+              stateMutability: "nonpayable",
+              type: "function",
             },
             {
               inputs: [],
@@ -3468,19 +3465,6 @@ export const deployedContracts = {
                 },
               ],
               name: "setFunctionHandler",
-              outputs: [],
-              stateMutability: "nonpayable",
-              type: "function",
-            },
-            {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "hooks",
-                  type: "address",
-                },
-              ],
-              name: "setHooks",
               outputs: [],
               stateMutability: "nonpayable",
               type: "function",
