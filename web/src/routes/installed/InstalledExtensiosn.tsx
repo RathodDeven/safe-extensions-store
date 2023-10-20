@@ -22,7 +22,7 @@ const InstalledExtensiosn = () => {
       try {
         const loadedPlugins = await loadEnabledPlugins();
         console.log("loadedPlugins", loadedPlugins);
-        setPlugins(loadedPlugins);
+        setInstalledPlugins(loadedPlugins);
         setPlugins(loadedPlugins);
       } catch (e) {
         console.warn(e);
