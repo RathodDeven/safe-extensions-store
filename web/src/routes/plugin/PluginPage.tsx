@@ -13,6 +13,10 @@ const PluginPage = () => {
   const { details } = usePluginDetails(pluginAddress);
   const setPlugin = usePluginStore((state) => state.addPlugin);
   const [enabled, setEnabled] = React.useState<undefined | boolean>(undefined);
+  const installedPLugins = usePluginStore((state) => state.installedPlugins);
+  const setInstalledPlugins = usePluginStore(
+    (state) => state.setInstalledPlugins
+  );
 
   console.log("enabled", enabled);
 
@@ -31,6 +35,9 @@ const PluginPage = () => {
           ...details,
           enabled: false,
         });
+        setInstalledPlugins(
+          installedPLugins.filter((plugin) => plugin !== pluginAddress)
+        );
         setEnabled(false);
       } else {
         // await enablePlugin(pluginAddress, details.metadata.requiresRootAccess);
@@ -39,6 +46,7 @@ const PluginPage = () => {
           ...details,
           enabled: true,
         });
+        setInstalledPlugins([...installedPLugins, pluginAddress]);
         setEnabled(true);
       }
     } catch (e) {

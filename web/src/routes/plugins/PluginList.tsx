@@ -2,18 +2,28 @@ import { useEffect, useState } from "react";
 import "./Plugins.css";
 import { loadPlugins } from "../../logic/plugins";
 import { Plugin } from "./Plugin";
+import { usePluginStore } from "../../logic/store/pluginStore";
 
 const PluginList = () => {
-  const [showFlagged, setFilterFlagged] = useState<boolean>(false);
   const [plugins, setPlugins] = useState<string[]>([]);
+  const discoveredPlugins = usePluginStore((state) => state.discoveredPlugins);
+  const setDiscoverPlugins = usePluginStore(
+    (state) => state.setDiscoveredPlugins
+  );
 
   useEffect(() => {
     const fetchData = async () => {
       console.log("fetching data");
 
+      if (discoveredPlugins?.length > 0) {
+        setPlugins(discoveredPlugins);
+        return;
+      }
+
       try {
-        const loadedPlugins = await loadPlugins(!showFlagged);
+        const loadedPlugins = await loadPlugins();
         console.log("loadedPlugins", loadedPlugins);
+        setDiscoverPlugins(loadedPlugins);
         setPlugins(loadedPlugins);
       } catch (e) {
         console.warn(e);

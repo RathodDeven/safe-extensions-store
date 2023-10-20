@@ -1,17 +1,28 @@
 import React from "react";
 import { Plugin } from "../plugins/Plugin";
 import { loadEnabledPlugins } from "../../logic/plugins";
+import { usePluginStore } from "../../logic/store/pluginStore";
 
 const InstalledExtensiosn = () => {
   const [plugins, setPlugins] = React.useState<string[]>([]);
+  const installedPlugins = usePluginStore((state) => state.installedPlugins);
+  const setInstalledPlugins = usePluginStore(
+    (state) => state.setInstalledPlugins
+  );
 
   React.useEffect(() => {
     const fetchData = async () => {
       console.log("fetching data");
 
+      if (installedPlugins?.length > 0) {
+        setPlugins(installedPlugins);
+        return;
+      }
+
       try {
         const loadedPlugins = await loadEnabledPlugins();
         console.log("loadedPlugins", loadedPlugins);
+        setPlugins(loadedPlugins);
         setPlugins(loadedPlugins);
       } catch (e) {
         console.warn(e);
