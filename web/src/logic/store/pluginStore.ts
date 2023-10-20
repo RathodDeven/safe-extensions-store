@@ -10,8 +10,6 @@ interface PluginStore {
   plugins: Map<string, PluginDetails>;
   addPlugin: (address: string, plugin: PluginDetails) => void;
   addPlugins: (pluginsWithAddresses: PluginWithAddress[]) => void;
-  discoverPlugins: string[];
-  setDiscoverPlugins: (plugins: string[]) => void;
 }
 
 export const usePluginStore = create<PluginStore>((set) => ({
@@ -30,6 +28,4 @@ export const usePluginStore = create<PluginStore>((set) => ({
       });
       return { plugins };
     }),
-  discoverPlugins: [],
-  setDiscoverPlugins: (plugins: string[]) => set({ discoverPlugins: plugins }),
 }));
