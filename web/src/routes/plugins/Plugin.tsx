@@ -42,9 +42,14 @@ export const Plugin: FunctionComponent<PluginProps> = ({ address }) => {
         </div>
 
         <div className="flex flex-row flex-wrap text-s-text font-bold text-xs">
-          {details?.metadata?.requiresRootAccess && (
+          {/* {details?.metadata?.requiresRootAccess && (
             <div className="rounded-md bg-s-bg px-2 py-1 border-s-text/10 shadow-xl border">
               {`Requires Root Access`}
+            </div>
+          )} */}
+          {details?.metadata?.requiredPermissions && (
+            <div className="rounded-md bg-s-bg px-2 py-1 border-s-text/10 shadow-xl border">
+              {`Required Permissions ${details?.metadata?.requiredPermissions}`}
             </div>
           )}
         </div>

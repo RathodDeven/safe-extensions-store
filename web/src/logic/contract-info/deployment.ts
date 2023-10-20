@@ -4683,8 +4683,33 @@ export const deployedContracts = {
           ],
         },
         TestSafeProtocolManager: {
-          address: "0x7403C9263418628E7F1d89D777472347438962B4",
+          address: "0x4DA9d9e5F0C6f7718b29673947c54D4A5Bab7D85",
           abi: [
+            {
+              inputs: [],
+              name: "acceptOwnership",
+              outputs: [],
+              stateMutability: "nonpayable",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "bytes32",
+                  name: "",
+                  type: "bytes32",
+                },
+                {
+                  internalType: "bool",
+                  name: "success",
+                  type: "bool",
+                },
+              ],
+              name: "checkAfterExecution",
+              outputs: [],
+              stateMutability: "nonpayable",
+              type: "function",
+            },
             {
               inputs: [
                 {
@@ -4726,12 +4751,266 @@ export const deployedContracts = {
               inputs: [
                 {
                   internalType: "address",
+                  name: "to",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "value",
+                  type: "uint256",
+                },
+                {
+                  internalType: "bytes",
+                  name: "data",
+                  type: "bytes",
+                },
+                {
+                  internalType: "enum Enum.Operation",
+                  name: "operation",
+                  type: "uint8",
+                },
+                {
+                  internalType: "address",
+                  name: "module",
+                  type: "address",
+                },
+              ],
+              name: "checkModuleTransaction",
+              outputs: [
+                {
+                  internalType: "bytes32",
+                  name: "moduleTxHash",
+                  type: "bytes32",
+                },
+              ],
+              stateMutability: "nonpayable",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "to",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "value",
+                  type: "uint256",
+                },
+                {
+                  internalType: "bytes",
+                  name: "data",
+                  type: "bytes",
+                },
+                {
+                  internalType: "enum Enum.Operation",
+                  name: "operation",
+                  type: "uint8",
+                },
+                {
+                  internalType: "uint256",
+                  name: "safeTxGas",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "baseGas",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "gasPrice",
+                  type: "uint256",
+                },
+                {
+                  internalType: "address",
+                  name: "gasToken",
+                  type: "address",
+                },
+                {
+                  internalType: "address payable",
+                  name: "refundReceiver",
+                  type: "address",
+                },
+                {
+                  internalType: "bytes",
+                  name: "signatures",
+                  type: "bytes",
+                },
+                {
+                  internalType: "address",
+                  name: "msgSender",
+                  type: "address",
+                },
+              ],
+              name: "checkTransaction",
+              outputs: [],
+              stateMutability: "nonpayable",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "address",
                   name: "account",
                   type: "address",
                 },
               ],
               name: "ContractDoesNotImplementValidInterfaceId",
               type: "error",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "prevPlugin",
+                  type: "address",
+                },
+                {
+                  internalType: "address",
+                  name: "plugin",
+                  type: "address",
+                },
+              ],
+              name: "disablePlugin",
+              outputs: [],
+              stateMutability: "nonpayable",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "plugin",
+                  type: "address",
+                },
+                {
+                  internalType: "uint8",
+                  name: "permissions",
+                  type: "uint8",
+                },
+              ],
+              name: "enablePlugin",
+              outputs: [],
+              stateMutability: "nonpayable",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "account",
+                  type: "address",
+                },
+                {
+                  components: [
+                    {
+                      components: [
+                        {
+                          internalType: "address payable",
+                          name: "to",
+                          type: "address",
+                        },
+                        {
+                          internalType: "uint256",
+                          name: "value",
+                          type: "uint256",
+                        },
+                        {
+                          internalType: "bytes",
+                          name: "data",
+                          type: "bytes",
+                        },
+                      ],
+                      internalType: "struct SafeProtocolAction",
+                      name: "action",
+                      type: "tuple",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "nonce",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "bytes32",
+                      name: "metadataHash",
+                      type: "bytes32",
+                    },
+                  ],
+                  internalType: "struct SafeRootAccess",
+                  name: "rootAccess",
+                  type: "tuple",
+                },
+              ],
+              name: "executeRootAccess",
+              outputs: [
+                {
+                  internalType: "bytes",
+                  name: "data",
+                  type: "bytes",
+                },
+              ],
+              stateMutability: "nonpayable",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "account",
+                  type: "address",
+                },
+                {
+                  components: [
+                    {
+                      components: [
+                        {
+                          internalType: "address payable",
+                          name: "to",
+                          type: "address",
+                        },
+                        {
+                          internalType: "uint256",
+                          name: "value",
+                          type: "uint256",
+                        },
+                        {
+                          internalType: "bytes",
+                          name: "data",
+                          type: "bytes",
+                        },
+                      ],
+                      internalType: "struct SafeProtocolAction[]",
+                      name: "actions",
+                      type: "tuple[]",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "nonce",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "bytes32",
+                      name: "metadataHash",
+                      type: "bytes32",
+                    },
+                  ],
+                  internalType: "struct SafeTransaction",
+                  name: "transaction",
+                  type: "tuple",
+                },
+              ],
+              name: "executeTransaction",
+              outputs: [
+                {
+                  internalType: "bytes[]",
+                  name: "data",
+                  type: "bytes[]",
+                },
+              ],
+              stateMutability: "nonpayable",
+              type: "function",
             },
             {
               inputs: [
@@ -4747,11 +5026,6 @@ export const deployedContracts = {
                 },
               ],
               name: "FunctionHandlerNotSet",
-              type: "error",
-            },
-            {
-              inputs: [],
-              name: "InvalidCalldataLength",
               type: "error",
             },
             {
@@ -4774,17 +5048,6 @@ export const deployedContracts = {
                 },
               ],
               name: "InvalidPrevPluginAddress",
-              type: "error",
-            },
-            {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "sender",
-                  type: "address",
-                },
-              ],
-              name: "InvalidSender",
               type: "error",
             },
             {
@@ -4909,6 +5172,13 @@ export const deployedContracts = {
               type: "error",
             },
             {
+              inputs: [],
+              name: "renounceOwnership",
+              outputs: [],
+              stateMutability: "nonpayable",
+              type: "function",
+            },
+            {
               inputs: [
                 {
                   internalType: "address",
@@ -4923,6 +5193,57 @@ export const deployedContracts = {
               ],
               name: "RootAccessActionExecutionFailed",
               type: "error",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "bytes4",
+                  name: "selector",
+                  type: "bytes4",
+                },
+                {
+                  internalType: "address",
+                  name: "functionHandler",
+                  type: "address",
+                },
+              ],
+              name: "setFunctionHandler",
+              outputs: [],
+              stateMutability: "nonpayable",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "newRegistry",
+                  type: "address",
+                },
+              ],
+              name: "setRegistry",
+              outputs: [],
+              stateMutability: "nonpayable",
+              type: "function",
+            },
+            {
+              inputs: [],
+              name: "testFunction",
+              outputs: [],
+              stateMutability: "nonpayable",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "newOwner",
+                  type: "address",
+                },
+              ],
+              name: "transferOwnership",
+              outputs: [],
+              stateMutability: "nonpayable",
+              type: "function",
             },
             {
               inputs: [],
@@ -5119,171 +5440,21 @@ export const deployedContracts = {
               type: "event",
             },
             {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "hooks",
+                  type: "address",
+                },
+              ],
+              name: "setHooks",
+              outputs: [],
+              stateMutability: "nonpayable",
+              type: "function",
+            },
+            {
               stateMutability: "nonpayable",
               type: "fallback",
-            },
-            {
-              inputs: [],
-              name: "acceptOwnership",
-              outputs: [],
-              stateMutability: "nonpayable",
-              type: "function",
-            },
-            {
-              inputs: [
-                {
-                  internalType: "bytes32",
-                  name: "",
-                  type: "bytes32",
-                },
-                {
-                  internalType: "bool",
-                  name: "success",
-                  type: "bool",
-                },
-              ],
-              name: "checkAfterExecution",
-              outputs: [],
-              stateMutability: "nonpayable",
-              type: "function",
-            },
-            {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "to",
-                  type: "address",
-                },
-                {
-                  internalType: "uint256",
-                  name: "value",
-                  type: "uint256",
-                },
-                {
-                  internalType: "bytes",
-                  name: "data",
-                  type: "bytes",
-                },
-                {
-                  internalType: "enum Enum.Operation",
-                  name: "operation",
-                  type: "uint8",
-                },
-                {
-                  internalType: "address",
-                  name: "module",
-                  type: "address",
-                },
-              ],
-              name: "checkModuleTransaction",
-              outputs: [
-                {
-                  internalType: "bytes32",
-                  name: "moduleTxHash",
-                  type: "bytes32",
-                },
-              ],
-              stateMutability: "nonpayable",
-              type: "function",
-            },
-            {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "to",
-                  type: "address",
-                },
-                {
-                  internalType: "uint256",
-                  name: "value",
-                  type: "uint256",
-                },
-                {
-                  internalType: "bytes",
-                  name: "data",
-                  type: "bytes",
-                },
-                {
-                  internalType: "enum Enum.Operation",
-                  name: "operation",
-                  type: "uint8",
-                },
-                {
-                  internalType: "uint256",
-                  name: "safeTxGas",
-                  type: "uint256",
-                },
-                {
-                  internalType: "uint256",
-                  name: "baseGas",
-                  type: "uint256",
-                },
-                {
-                  internalType: "uint256",
-                  name: "gasPrice",
-                  type: "uint256",
-                },
-                {
-                  internalType: "address",
-                  name: "gasToken",
-                  type: "address",
-                },
-                {
-                  internalType: "address payable",
-                  name: "refundReceiver",
-                  type: "address",
-                },
-                {
-                  internalType: "bytes",
-                  name: "signatures",
-                  type: "bytes",
-                },
-                {
-                  internalType: "address",
-                  name: "msgSender",
-                  type: "address",
-                },
-              ],
-              name: "checkTransaction",
-              outputs: [],
-              stateMutability: "nonpayable",
-              type: "function",
-            },
-            {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "prevPlugin",
-                  type: "address",
-                },
-                {
-                  internalType: "address",
-                  name: "plugin",
-                  type: "address",
-                },
-              ],
-              name: "disablePlugin",
-              outputs: [],
-              stateMutability: "nonpayable",
-              type: "function",
-            },
-            {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "plugin",
-                  type: "address",
-                },
-                {
-                  internalType: "uint8",
-                  name: "permissions",
-                  type: "uint8",
-                },
-              ],
-              name: "enablePlugin",
-              outputs: [],
-              stateMutability: "nonpayable",
-              type: "function",
             },
             {
               inputs: [
@@ -5331,122 +5502,6 @@ export const deployedContracts = {
                 },
               ],
               stateMutability: "view",
-              type: "function",
-            },
-            {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "account",
-                  type: "address",
-                },
-                {
-                  components: [
-                    {
-                      components: [
-                        {
-                          internalType: "address payable",
-                          name: "to",
-                          type: "address",
-                        },
-                        {
-                          internalType: "uint256",
-                          name: "value",
-                          type: "uint256",
-                        },
-                        {
-                          internalType: "bytes",
-                          name: "data",
-                          type: "bytes",
-                        },
-                      ],
-                      internalType: "struct SafeProtocolAction",
-                      name: "action",
-                      type: "tuple",
-                    },
-                    {
-                      internalType: "uint256",
-                      name: "nonce",
-                      type: "uint256",
-                    },
-                    {
-                      internalType: "bytes32",
-                      name: "metadataHash",
-                      type: "bytes32",
-                    },
-                  ],
-                  internalType: "struct SafeRootAccess",
-                  name: "rootAccess",
-                  type: "tuple",
-                },
-              ],
-              name: "executeRootAccess",
-              outputs: [
-                {
-                  internalType: "bytes",
-                  name: "data",
-                  type: "bytes",
-                },
-              ],
-              stateMutability: "nonpayable",
-              type: "function",
-            },
-            {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "account",
-                  type: "address",
-                },
-                {
-                  components: [
-                    {
-                      components: [
-                        {
-                          internalType: "address payable",
-                          name: "to",
-                          type: "address",
-                        },
-                        {
-                          internalType: "uint256",
-                          name: "value",
-                          type: "uint256",
-                        },
-                        {
-                          internalType: "bytes",
-                          name: "data",
-                          type: "bytes",
-                        },
-                      ],
-                      internalType: "struct SafeProtocolAction[]",
-                      name: "actions",
-                      type: "tuple[]",
-                    },
-                    {
-                      internalType: "uint256",
-                      name: "nonce",
-                      type: "uint256",
-                    },
-                    {
-                      internalType: "bytes32",
-                      name: "metadataHash",
-                      type: "bytes32",
-                    },
-                  ],
-                  internalType: "struct SafeTransaction",
-                  name: "transaction",
-                  type: "tuple",
-                },
-              ],
-              name: "executeTransaction",
-              outputs: [
-                {
-                  internalType: "bytes[]",
-                  name: "data",
-                  type: "bytes[]",
-                },
-              ],
-              stateMutability: "nonpayable",
               type: "function",
             },
             {
@@ -5650,57 +5705,6 @@ export const deployedContracts = {
               type: "function",
             },
             {
-              inputs: [],
-              name: "renounceOwnership",
-              outputs: [],
-              stateMutability: "nonpayable",
-              type: "function",
-            },
-            {
-              inputs: [
-                {
-                  internalType: "bytes4",
-                  name: "selector",
-                  type: "bytes4",
-                },
-                {
-                  internalType: "address",
-                  name: "functionHandler",
-                  type: "address",
-                },
-              ],
-              name: "setFunctionHandler",
-              outputs: [],
-              stateMutability: "nonpayable",
-              type: "function",
-            },
-            {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "hooks",
-                  type: "address",
-                },
-              ],
-              name: "setHooks",
-              outputs: [],
-              stateMutability: "nonpayable",
-              type: "function",
-            },
-            {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "newRegistry",
-                  type: "address",
-                },
-              ],
-              name: "setRegistry",
-              outputs: [],
-              stateMutability: "nonpayable",
-              type: "function",
-            },
-            {
               inputs: [
                 {
                   internalType: "bytes4",
@@ -5741,26 +5745,6 @@ export const deployedContracts = {
                 },
               ],
               stateMutability: "view",
-              type: "function",
-            },
-            {
-              inputs: [],
-              name: "testFunction",
-              outputs: [],
-              stateMutability: "nonpayable",
-              type: "function",
-            },
-            {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "newOwner",
-                  type: "address",
-                },
-              ],
-              name: "transferOwnership",
-              outputs: [],
-              stateMutability: "nonpayable",
               type: "function",
             },
           ],

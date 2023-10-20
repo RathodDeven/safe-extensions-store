@@ -28,7 +28,7 @@ export const loadPluginDetails = async (
   return { metadata, enabled };
 };
 
-export const loadPlugins = async (
+export const loadPluginsOfIntegrations = async (
   filterFlagged: boolean = true
 ): Promise<string[]> => {
   const registry = await getRegistry();
@@ -58,6 +58,34 @@ export const loadPlugins = async (
   return addedModules.filter((module) => flaggedModules.indexOf(module) < 0);
 };
 
+export const loadPlugins = async (
+  filterFlagged: boolean = true
+): Promise<string[]> => {
+  const registry = await getRegistry();
+  // const registry = await getRegistryFromJsonProvider();
+  const addedEvents = (await registry.queryFilter(
+    registry.filters.ModuleAdded,
+    11130728,
+    "latest"
+  )) as EventLog[];
+
+  console.log("addedEvents", addedEvents);
+
+  const addedModules = addedEvents.map((event: EventLog) => event.args.module);
+
+  if (!filterFlagged) return addedModules;
+  const flaggedEvents = (await registry.queryFilter(
+    registry.filters.ModuleFlagged,
+    11130728
+  )) as EventLog[];
+
+  const flaggedModules = flaggedEvents.map(
+    (event: EventLog) => event.args.module
+  );
+
+  return addedModules.filter((module) => flaggedModules.indexOf(module) < 0);
+};
+
 export const isPluginEnabled = async (plugin: string) => {
   if (!(await isConnectedToSafe())) throw Error("Not connected to a Safe");
   const manager = await getManager();
@@ -80,14 +108,17 @@ export const loadEnabledPlugins = async (): Promise<string[]> => {
 
 const buildEnablePlugin = async (
   plugin: string,
-  requiresRootAccess: boolean
+  requiredPermissions: number
 ): Promise<BaseTransaction> => {
   const manager = await getManager();
   const tx = {
     to: await manager.getAddress(),
     value: "0",
     data: (
-      await manager.enablePlugin.populateTransaction(plugin, requiresRootAccess)
+      await manager.enablePlugin.populateTransaction(
+        plugin,
+        requiredPermissions
+      )
     ).data,
   };
 
@@ -97,7 +128,7 @@ const buildEnablePlugin = async (
 
 export const enablePlugin = async (
   plugin: string,
-  requiresRootAccess: boolean
+  requiredPermissions: number
 ) => {
   if (!(await isConnectedToSafe())) throw Error("Not connected to a Safe");
   const manager = await getManager();
@@ -108,11 +139,47 @@ export const enablePlugin = async (
     txs.push(await buildEnableModule(info.safeAddress, managerAddress));
   }
   if (!(await isPluginEnabled(plugin))) {
-    txs.push(await buildEnablePlugin(plugin, requiresRootAccess));
+    txs.push(await buildEnablePlugin(plugin, requiredPermissions));
   }
   if (txs.length === 0) return;
   await submitTxs(txs);
 };
+
+// const buildEnablePlugin = async (
+//   plugin: string,
+//   requiresRootAccess: boolean
+// ): Promise<BaseTransaction> => {
+//   const manager = await getManager();
+//   const tx = {
+//     to: await manager.getAddress(),
+//     value: "0",
+//     data: (
+//       await manager.enablePlugin.populateTransaction(plugin, requiresRootAccess)
+//     ).data,
+//   };
+
+//   console.log("buildEnablePlugin tx", tx);
+//   return tx;
+// };
+
+// export const enablePlugin = async (
+//   plugin: string,
+//   requiresRootAccess: boolean
+// ) => {
+//   if (!(await isConnectedToSafe())) throw Error("Not connected to a Safe");
+//   const manager = await getManager();
+//   const managerAddress = await manager.getAddress();
+//   const info = await getSafeInfo();
+//   const txs: BaseTransaction[] = [];
+//   if (!(await isModuleEnabled(info.safeAddress, managerAddress))) {
+//     txs.push(await buildEnableModule(info.safeAddress, managerAddress));
+//   }
+//   if (!(await isPluginEnabled(plugin))) {
+//     txs.push(await buildEnablePlugin(plugin, requiresRootAccess));
+//   }
+//   if (txs.length === 0) return;
+//   await submitTxs(txs);
+// };
 
 const buildDisablePlugin = async (
   pointer: string,

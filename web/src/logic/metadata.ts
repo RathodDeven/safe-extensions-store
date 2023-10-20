@@ -9,14 +9,25 @@ import {
 import { getMetadataProvider } from "./protocol";
 import { getProvider } from "./web3";
 
+// export interface PluginMetadata {
+//   name: string;
+//   version: string;
+//   requiresRootAccess: boolean;
+//   iconUrl: string;
+//   appUrl: string;
+//   description: string;
+//   category: string;
+// }
+
 export interface PluginMetadata {
   name: string;
   version: string;
-  requiresRootAccess: boolean;
+  requiredPermissions: number;
   iconUrl: string;
   appUrl: string;
   description: string;
   category: string;
+  ssUrls: string[];
 }
 
 // const ProviderType_IPFS = BigInt(0);
@@ -27,14 +38,25 @@ const ProviderType_Event = BigInt(3);
 const MetadataEvent: string[] = [
   "event Metadata(bytes32 indexed metadataHash, bytes data)",
 ];
+// const PluginMetadataType: string[] = [
+//   "string name",
+//   "string version",
+//   "bool requiresRootAccess",
+//   "string iconUrl",
+//   "string appUrl",
+//   "string description",
+//   "string category",
+// ];
+
 const PluginMetadataType: string[] = [
   "string name",
   "string version",
-  "bool requiresRootAccess",
+  "uint8 requiredPermissions",
   "string iconUrl",
   "string appUrl",
   "string description",
   "string category",
+  "string[] ssUrls",
 ];
 
 const loadPluginMetadataFromContract = async (
@@ -113,14 +135,25 @@ export const decodePluginMetadata = (
   );
 
   console.log("decoded", decoded);
+  // return {
+  //   name: decoded[0],
+  //   version: decoded[1],
+  //   requiresRootAccess: decoded[2],
+  //   iconUrl: decoded[3],
+  //   appUrl: parseAppUrl(decoded[4], pluginAddress),
+  //   description: decoded[5],
+  //   category: decoded[6],
+  // };
+
   return {
     name: decoded[0],
     version: decoded[1],
-    requiresRootAccess: decoded[2],
+    requiredPermissions: decoded[2],
     iconUrl: decoded[3],
     appUrl: parseAppUrl(decoded[4], pluginAddress),
     description: decoded[5],
     category: decoded[6],
+    ssUrls: decoded[7],
   };
 };
 

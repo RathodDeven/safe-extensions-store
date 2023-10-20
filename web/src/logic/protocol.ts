@@ -14,23 +14,21 @@ const PLUGIN_ABI = [
 export const getManager = async () => {
   const provider = await getProvider();
   const registryInfo =
-    deployedContracts[84531][0].contracts.TestSafeProtocolManagerOld;
+    deployedContracts[84531][0].contracts.TestSafeProtocolManager;
   return new ethers.Contract(registryInfo.address, registryInfo.abi, provider);
 };
 
 export const getRegistryFromJsonProvider = async () => {
   const provider = await getJsonProvider();
   const registryInfo =
-    deployedContracts[84531][0].contracts
-      .TestSafeProtocolRegistryUnrestrictedOld;
+    deployedContracts[84531][0].contracts.TestSafeProtocolRegistryUnrestricted;
   return new ethers.Contract(registryInfo.address, registryInfo.abi, provider);
 };
 
 export const getRegistry = async () => {
   const provider = await getProvider();
   const registryInfo =
-    deployedContracts[84531][0].contracts
-      .TestSafeProtocolRegistryUnrestrictedOld;
+    deployedContracts[84531][0].contracts.TestSafeProtocolRegistryUnrestricted;
   return new ethers.Contract(registryInfo.address, registryInfo.abi, provider);
 };
 
