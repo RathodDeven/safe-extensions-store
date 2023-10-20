@@ -1,0 +1,428 @@
+{
+	"compiler": {
+		"version": "0.8.20+commit.a1b79de6"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "initialOwner",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "integration",
+						"type": "address"
+					}
+				],
+				"name": "CannotAddIntegration",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "integration",
+						"type": "address"
+					}
+				],
+				"name": "CannotFlagIntegration",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "integration",
+						"type": "address"
+					},
+					{
+						"internalType": "bytes4",
+						"name": "expectedInterfaceId",
+						"type": "bytes4"
+					}
+				],
+				"name": "IntegrationDoesNotSupportExpectedInterfaceId",
+				"type": "error"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "integration",
+						"type": "address"
+					}
+				],
+				"name": "IntegrationAdded",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "integration",
+						"type": "address"
+					}
+				],
+				"name": "IntegrationFlagged",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "previousOwner",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "newOwner",
+						"type": "address"
+					}
+				],
+				"name": "OwnershipTransferStarted",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "previousOwner",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "newOwner",
+						"type": "address"
+					}
+				],
+				"name": "OwnershipTransferred",
+				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "acceptOwnership",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "integration",
+						"type": "address"
+					},
+					{
+						"internalType": "enum Enum.IntegrationType",
+						"name": "integrationType",
+						"type": "uint8"
+					}
+				],
+				"name": "addIntegration",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "integration",
+						"type": "address"
+					}
+				],
+				"name": "check",
+				"outputs": [
+					{
+						"internalType": "uint64",
+						"name": "listedAt",
+						"type": "uint64"
+					},
+					{
+						"internalType": "uint64",
+						"name": "flaggedAt",
+						"type": "uint64"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "integration",
+						"type": "address"
+					}
+				],
+				"name": "flagIntegration",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "listedIntegrations",
+				"outputs": [
+					{
+						"internalType": "uint64",
+						"name": "listedAt",
+						"type": "uint64"
+					},
+					{
+						"internalType": "uint64",
+						"name": "flaggedAt",
+						"type": "uint64"
+					},
+					{
+						"internalType": "enum Enum.IntegrationType",
+						"name": "integrationType",
+						"type": "uint8"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "pendingOwner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "renounceOwnership",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes4",
+						"name": "interfaceId",
+						"type": "bytes4"
+					}
+				],
+				"name": "supportsInterface",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "newOwner",
+						"type": "address"
+					}
+				],
+				"name": "transferOwnership",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {
+				"acceptOwnership()": {
+					"details": "The new owner accepts the ownership transfer."
+				},
+				"addIntegration(address,uint8)": {
+					"params": {
+						"integration": "Address of the integration",
+						"integrationType": "Enum.IntegrationType indicating the type of integration"
+					}
+				},
+				"check(address)": {
+					"params": {
+						"integration": "Address of the integration to be checked"
+					},
+					"returns": {
+						"flaggedAt": "Timestamp of falgging the integration. This value will be 0 if not flagged.",
+						"listedAt": "Timestamp of listing the integration. This value will be 0 if not listed."
+					}
+				},
+				"flagIntegration(address)": {
+					"params": {
+						"integration": "Address of the integration"
+					}
+				},
+				"owner()": {
+					"details": "Returns the address of the current owner."
+				},
+				"pendingOwner()": {
+					"details": "Returns the address of the pending owner."
+				},
+				"renounceOwnership()": {
+					"details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby disabling any functionality that is only available to the owner."
+				},
+				"supportsInterface(bytes4)": {
+					"details": "Returns true if this contract implements the interface defined by `interfaceId`. See the corresponding https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified[EIP section] to learn more about how these ids are created. This function call must use less than 30 000 gas."
+				},
+				"transferOwnership(address)": {
+					"details": "Starts the ownership transfer of the contract to a new account. Replaces the pending transfer if there is one. Can only be called by the current owner."
+				}
+			},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {
+				"addIntegration(address,uint8)": {
+					"notice": "Allows only owner to add a integration. A integration can be any address including zero address for now.         This function does not permit adding a integration twice. This function validates if integration supports expected interfaceId."
+				},
+				"check(address)": {
+					"notice": "This function returns information about a integration"
+				},
+				"flagIntegration(address)": {
+					"notice": "Allows only owner to flad a integration. Only previously added integration can be flagged.         This function does not permit flagging a integration twice.         A integration can be any address including zero address for now."
+				}
+			},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"SafeProtocolRegistry.sol": "SafeProtocolRegistry"
+		},
+		"evmVersion": "paris",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"@openzeppelin/contracts/utils/introspection/IERC165.sol": {
+			"keccak256": "0x4296879f55019b23e135000eb36896057e7101fb7fb859c5ef690cf14643757b",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://87b3541437c8c443ccd36795e56a338ed12855eec17f8da624511b8d1a7e14df",
+				"dweb:/ipfs/QmeJQCtZrQjtJLr6u7ZHWeH3pBnjtLWzvRrKViAi7UZqxL"
+			]
+		},
+		"DataTypes.sol": {
+			"keccak256": "0xba96a56684fa0731bb1553f865b156083c24abaeb3212d4704aaf5a76f36ba6b",
+			"license": "LGPL-3.0-only",
+			"urls": [
+				"bzz-raw://fb9136ce85f8f5ea65d12c09ba433486afd10c23951ccfb583456a24831a6c6c",
+				"dweb:/ipfs/QmfD95cswa47jGrmhDb2yrTEcGM5RLkESxWCZHMGiXYPe3"
+			]
+		},
+		"SafeProtocolRegistry.sol": {
+			"keccak256": "0x5369862a2ad7e91386c5f48d5ec2696f5f8ae7ca516ca094d3a3242441397de6",
+			"license": "LGPL-3.0-only",
+			"urls": [
+				"bzz-raw://3178d73d40200a06053de089bab13fadc65b7b2488eb6968cdfc6a4a5ef7ad5b",
+				"dweb:/ipfs/QmXP35iCszZfLYDNtbnkFoFo3moFd6SJvxqGH3NS3i8rsA"
+			]
+		},
+		"common/Enum.sol": {
+			"keccak256": "0xf96606b2d5e0faf667ceb2ae0b29b617c99d8ad6d36b0e5db2aa4e6e10c18e28",
+			"license": "LGPL-3.0-only",
+			"urls": [
+				"bzz-raw://936e5556c3bcfc7cffee8b362abf2b198871765219731f0ce03188ecce51e19e",
+				"dweb:/ipfs/QmYDebakEh2N344igmXv8JtAqMAktAm5TuW49RiCoNhvxK"
+			]
+		},
+		"interfaces/Integrations.sol": {
+			"keccak256": "0x6a8e85474431c7cff76528d144353a6d9d318cfbe7b6375423b6d4117c33b597",
+			"license": "LGPL-3.0-only",
+			"urls": [
+				"bzz-raw://4cb3d9a800e0de8ddc43cbdb249b9ffd69c14a750c389d7139f8231b189987ad",
+				"dweb:/ipfs/QmYrsATZ5L9XL28vgLqhWyb7hVQfhC45VRtA2A9jA7wXSA"
+			]
+		},
+		"interfaces/Registry.sol": {
+			"keccak256": "0x326d17098b54c6c7f777f329e7db6447e5955f69825b985167b9761d54191e46",
+			"license": "LGPL-3.0-only",
+			"urls": [
+				"bzz-raw://207b876255d60c9d3b78bac355817e7ff952c39bd2805c0f0e0fa0ce14fbffd1",
+				"dweb:/ipfs/QmNfaJgDfghYoPTumiLvy8TaZNfiNGDCLwENpDgsxmVq3m"
+			]
+		},
+		"ownable/Context.sol": {
+			"keccak256": "0x81d5fc973a522c8909d60be6a201869d46aa47b030b8813f60616404628c2b94",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://9755b505799e622d964a843a8ed1fd60fedffca230178e5cb95ae9280df4dcd2",
+				"dweb:/ipfs/QmRkhUYUUgRZ2QYJjmtQct2ubyYwS3bdUMhbuFYM12VfYn"
+			]
+		},
+		"ownable/Ownable.sol": {
+			"keccak256": "0x673b1da37f2744f44a9deb6a48a75634f35acb19cca8802ff92df829e381b0ed",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://9e33fb87c6b3d834d9c884d96f9afb2259b765e1a31cec90bc1808e0a57e98d9",
+				"dweb:/ipfs/Qmct4JbYxL1HEDQ6odktWtNUsRC6jxx6eDmbmuSpnVspZs"
+			]
+		},
+		"ownable/Ownable2Step.sol": {
+			"keccak256": "0x2dea0183b9f457f9827b30a5c07797252fe348a52b7bb65b3391c6a3ae9f159a",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://32647c7ad298438546cdedb9d16827fd1616a19717189cd580c76252c17c2632",
+				"dweb:/ipfs/QmXdTR2C8uGedwnaZi81gKRc6rU8fpC4oAmSPLMHSrn96c"
+			]
+		}
+	},
+	"version": 1
+}

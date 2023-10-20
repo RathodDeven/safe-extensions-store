@@ -1,0 +1,456 @@
+{
+	"compiler": {
+		"version": "0.8.20+commit.a1b79de6"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "ContractDoesNotImplementValidInterfaceId",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "InvalidCalldataLength",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "sender",
+						"type": "address"
+					}
+				],
+				"name": "InvalidSender",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "plugin",
+						"type": "address"
+					},
+					{
+						"internalType": "uint64",
+						"name": "listedAt",
+						"type": "uint64"
+					},
+					{
+						"internalType": "uint64",
+						"name": "flaggedAt",
+						"type": "uint64"
+					},
+					{
+						"internalType": "uint8",
+						"name": "moduleType",
+						"type": "uint8"
+					}
+				],
+				"name": "ModuleNotPermitted",
+				"type": "error"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "hooksAddress",
+						"type": "address"
+					}
+				],
+				"name": "HooksChanged",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "previousOwner",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "newOwner",
+						"type": "address"
+					}
+				],
+				"name": "OwnershipTransferStarted",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "previousOwner",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "newOwner",
+						"type": "address"
+					}
+				],
+				"name": "OwnershipTransferred",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "oldRegistry",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "newRegistry",
+						"type": "address"
+					}
+				],
+				"name": "RegistryChanged",
+				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "acceptOwnership",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "enabledHooks",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "getEnabledHooks",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "hooksAddress",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "pendingOwner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "registry",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "renounceOwnership",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "hooks",
+						"type": "address"
+					}
+				],
+				"name": "setHooks",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "newRegistry",
+						"type": "address"
+					}
+				],
+				"name": "setRegistry",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "tempHooksData",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "hooksAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "bytes",
+						"name": "preCheckData",
+						"type": "bytes"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "newOwner",
+						"type": "address"
+					}
+				],
+				"name": "transferOwnership",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {
+				"acceptOwnership()": {
+					"details": "The new owner accepts the ownership transfer."
+				},
+				"getEnabledHooks(address)": {
+					"params": {
+						"account": "Address of an account"
+					},
+					"returns": {
+						"hooksAddress": "Address of hooks enabled for the account"
+					}
+				},
+				"owner()": {
+					"details": "Returns the address of the current owner."
+				},
+				"pendingOwner()": {
+					"details": "Returns the address of the pending owner."
+				},
+				"renounceOwnership()": {
+					"details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby disabling any functionality that is only available to the owner."
+				},
+				"setHooks(address)": {
+					"params": {
+						"hooks": "Address of the hooks to be enabled for msg.sender."
+					}
+				},
+				"setRegistry(address)": {
+					"params": {
+						"newRegistry": "Address of new registry"
+					}
+				},
+				"transferOwnership(address)": {
+					"details": "Starts the ownership transfer of the contract to a new account. Replaces the pending transfer if there is one. Can only be called by the current owner."
+				}
+			},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {
+				"getEnabledHooks(address)": {
+					"notice": "Returns the address of hooks for an account provided as a function parameter.         Returns address(0) is no hooks are enabled."
+				},
+				"setHooks(address)": {
+					"notice": "Sets hooks on an account. If Zero address is set, manager will not perform pre and post checks for account transactions."
+				},
+				"setRegistry(address)": {
+					"notice": "Allows only owner to update the address of a registry. Emits event RegistryChanged(egistry, newRegistry)"
+				},
+				"tempHooksData(address)": {
+					"notice": "This variable should store the address of the hooks contract whenever checkTransaction(...) is called and use it in checkAfterExecution(...) to avoid any side effects of changed hooks address inbetween transaction."
+				}
+			},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"base/HooksManager.sol": "HooksManager"
+		},
+		"evmVersion": "paris",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"@openzeppelin/contracts/utils/introspection/IERC165.sol": {
+			"keccak256": "0x4296879f55019b23e135000eb36896057e7101fb7fb859c5ef690cf14643757b",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://87b3541437c8c443ccd36795e56a338ed12855eec17f8da624511b8d1a7e14df",
+				"dweb:/ipfs/QmeJQCtZrQjtJLr6u7ZHWeH3pBnjtLWzvRrKViAi7UZqxL"
+			]
+		},
+		"DataTypes.sol": {
+			"keccak256": "0xba96a56684fa0731bb1553f865b156083c24abaeb3212d4704aaf5a76f36ba6b",
+			"license": "LGPL-3.0-only",
+			"urls": [
+				"bzz-raw://fb9136ce85f8f5ea65d12c09ba433486afd10c23951ccfb583456a24831a6c6c",
+				"dweb:/ipfs/QmfD95cswa47jGrmhDb2yrTEcGM5RLkESxWCZHMGiXYPe3"
+			]
+		},
+		"base/HooksManager.sol": {
+			"keccak256": "0x20b9d28b6a651acbf6f9aeffb160746db5a0cb126a145a0e7800af40d5440876",
+			"license": "LGPL-3.0-only",
+			"urls": [
+				"bzz-raw://d0f7ca9ded9468a99c73207eb25783da6181354e7139f4ea6595e87b33c701cb",
+				"dweb:/ipfs/QmbJBT5J43td2cXLPqQ6MzCTTao3dJrPiQc7QvzWDPMiju"
+			]
+		},
+		"base/OnlyAccountCallable.sol": {
+			"keccak256": "0xe37d616182b4038fa86941100a1f755a53af84aa6011798e6ddace2872b240cf",
+			"license": "LGPL-3.0-only",
+			"urls": [
+				"bzz-raw://854d7381e348b9381d3b72bc2ee76e2fb609d8a13eadbf32569f969a241a8029",
+				"dweb:/ipfs/QmNvpqnjJaB28Fk9VWaDU9uuzyGjMMHVvxCiZC1yvHpz3R"
+			]
+		},
+		"base/RegistryManager.sol": {
+			"keccak256": "0xad22041f0c6c4851e6c10e744630bed002b10da070412b528320d6dee03a26b2",
+			"license": "LGPL-3.0-only",
+			"urls": [
+				"bzz-raw://050feb4527e7f261f882db1b3888b8bf9e136d93b4ca1154d2c4b29c297884ee",
+				"dweb:/ipfs/QmQGdfyf9tXUWt99NngngszLtY36fnDVx2xJUyPPTXf2x1"
+			]
+		},
+		"common/Constants.sol": {
+			"keccak256": "0x29117901074b212304c9caa729efdf5ce5c2017c482e40560316fb0e65cd7eef",
+			"license": "LGPL-3.0-only",
+			"urls": [
+				"bzz-raw://38043931eb6281dd49e13767fca8484a29738969702a1e194998d7a4a7abb3ef",
+				"dweb:/ipfs/QmQZLt2DTCeRoz3JXhRpGNiSFr88ogsGXREgniW272pHGs"
+			]
+		},
+		"interfaces/Modules.sol": {
+			"keccak256": "0xd4604a7eb7642d5786e5a6afc4cf37f5b179a8f95a27d1cd0e0972f6894f2eb8",
+			"license": "LGPL-3.0-only",
+			"urls": [
+				"bzz-raw://c1558203c5a97a11ebe1df26a305aa708adb5f88dca0e4d942fa4ff615a61067",
+				"dweb:/ipfs/QmPHpQbDM2rnVkqcRA6Pp2odLckZwAq13hFKSbWS5ZaQoV"
+			]
+		},
+		"interfaces/Registry.sol": {
+			"keccak256": "0x866dde6d6df847f704e0474ceb67b8f006dc9da95317e284e70e8d9378cf8d23",
+			"license": "LGPL-3.0-only",
+			"urls": [
+				"bzz-raw://7b19a60ded218ec719b3df68995121c3d117e620180e18107cac2316a9c29dcb",
+				"dweb:/ipfs/QmY6uRhT3S18BtVDSmo8NmiKzAWu6r2MpuGMaByXSQRH4F"
+			]
+		},
+		"ownable/Context.sol": {
+			"keccak256": "0x81d5fc973a522c8909d60be6a201869d46aa47b030b8813f60616404628c2b94",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://9755b505799e622d964a843a8ed1fd60fedffca230178e5cb95ae9280df4dcd2",
+				"dweb:/ipfs/QmRkhUYUUgRZ2QYJjmtQct2ubyYwS3bdUMhbuFYM12VfYn"
+			]
+		},
+		"ownable/Ownable.sol": {
+			"keccak256": "0x673b1da37f2744f44a9deb6a48a75634f35acb19cca8802ff92df829e381b0ed",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://9e33fb87c6b3d834d9c884d96f9afb2259b765e1a31cec90bc1808e0a57e98d9",
+				"dweb:/ipfs/Qmct4JbYxL1HEDQ6odktWtNUsRC6jxx6eDmbmuSpnVspZs"
+			]
+		},
+		"ownable/Ownable2Step.sol": {
+			"keccak256": "0x2dea0183b9f457f9827b30a5c07797252fe348a52b7bb65b3391c6a3ae9f159a",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://32647c7ad298438546cdedb9d16827fd1616a19717189cd580c76252c17c2632",
+				"dweb:/ipfs/QmXdTR2C8uGedwnaZi81gKRc6rU8fpC4oAmSPLMHSrn96c"
+			]
+		}
+	},
+	"version": 1
+}

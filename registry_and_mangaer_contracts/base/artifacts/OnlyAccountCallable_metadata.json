@@ -1,0 +1,62 @@
+{
+	"compiler": {
+		"version": "0.8.20+commit.a1b79de6"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"name": "InvalidCalldataLength",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "sender",
+						"type": "address"
+					}
+				],
+				"name": "InvalidSender",
+				"type": "error"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"base/OnlyAccountCallable.sol": "OnlyAccountCallable"
+		},
+		"evmVersion": "paris",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"base/OnlyAccountCallable.sol": {
+			"keccak256": "0xe37d616182b4038fa86941100a1f755a53af84aa6011798e6ddace2872b240cf",
+			"license": "LGPL-3.0-only",
+			"urls": [
+				"bzz-raw://854d7381e348b9381d3b72bc2ee76e2fb609d8a13eadbf32569f969a241a8029",
+				"dweb:/ipfs/QmNvpqnjJaB28Fk9VWaDU9uuzyGjMMHVvxCiZC1yvHpz3R"
+			]
+		}
+	},
+	"version": 1
+}

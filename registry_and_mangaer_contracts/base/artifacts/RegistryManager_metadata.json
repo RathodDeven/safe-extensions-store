@@ -1,0 +1,300 @@
+{
+	"compiler": {
+		"version": "0.8.20+commit.a1b79de6"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_registry",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "initialOwner",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "ContractDoesNotImplementValidInterfaceId",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "plugin",
+						"type": "address"
+					},
+					{
+						"internalType": "uint64",
+						"name": "listedAt",
+						"type": "uint64"
+					},
+					{
+						"internalType": "uint64",
+						"name": "flaggedAt",
+						"type": "uint64"
+					},
+					{
+						"internalType": "uint8",
+						"name": "moduleType",
+						"type": "uint8"
+					}
+				],
+				"name": "ModuleNotPermitted",
+				"type": "error"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "previousOwner",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "newOwner",
+						"type": "address"
+					}
+				],
+				"name": "OwnershipTransferStarted",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "previousOwner",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "newOwner",
+						"type": "address"
+					}
+				],
+				"name": "OwnershipTransferred",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "oldRegistry",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "newRegistry",
+						"type": "address"
+					}
+				],
+				"name": "RegistryChanged",
+				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "acceptOwnership",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "pendingOwner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "registry",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "renounceOwnership",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "newRegistry",
+						"type": "address"
+					}
+				],
+				"name": "setRegistry",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "newOwner",
+						"type": "address"
+					}
+				],
+				"name": "transferOwnership",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {
+				"acceptOwnership()": {
+					"details": "The new owner accepts the ownership transfer."
+				},
+				"owner()": {
+					"details": "Returns the address of the current owner."
+				},
+				"pendingOwner()": {
+					"details": "Returns the address of the pending owner."
+				},
+				"renounceOwnership()": {
+					"details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby disabling any functionality that is only available to the owner."
+				},
+				"setRegistry(address)": {
+					"params": {
+						"newRegistry": "Address of new registry"
+					}
+				},
+				"transferOwnership(address)": {
+					"details": "Starts the ownership transfer of the contract to a new account. Replaces the pending transfer if there is one. Can only be called by the current owner."
+				}
+			},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {
+				"setRegistry(address)": {
+					"notice": "Allows only owner to update the address of a registry. Emits event RegistryChanged(egistry, newRegistry)"
+				}
+			},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"base/RegistryManager.sol": "RegistryManager"
+		},
+		"evmVersion": "paris",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"@openzeppelin/contracts/utils/introspection/IERC165.sol": {
+			"keccak256": "0x4296879f55019b23e135000eb36896057e7101fb7fb859c5ef690cf14643757b",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://87b3541437c8c443ccd36795e56a338ed12855eec17f8da624511b8d1a7e14df",
+				"dweb:/ipfs/QmeJQCtZrQjtJLr6u7ZHWeH3pBnjtLWzvRrKViAi7UZqxL"
+			]
+		},
+		"base/RegistryManager.sol": {
+			"keccak256": "0x0a0b390bc06affac3661d6939d6b1bb1be239641b6f0b882dd1d747c548f4f4f",
+			"license": "LGPL-3.0-only",
+			"urls": [
+				"bzz-raw://b960f3a8eab7777086bc53494cc70be1f625e6e7a547c1540205b5e98a810a2a",
+				"dweb:/ipfs/QmPcD3KZaKqHA3cpcUWCcSZNiggJnj8musiDhaFweXRF9o"
+			]
+		},
+		"interfaces/Registry.sol": {
+			"keccak256": "0x866dde6d6df847f704e0474ceb67b8f006dc9da95317e284e70e8d9378cf8d23",
+			"license": "LGPL-3.0-only",
+			"urls": [
+				"bzz-raw://7b19a60ded218ec719b3df68995121c3d117e620180e18107cac2316a9c29dcb",
+				"dweb:/ipfs/QmY6uRhT3S18BtVDSmo8NmiKzAWu6r2MpuGMaByXSQRH4F"
+			]
+		},
+		"ownable/Context.sol": {
+			"keccak256": "0x81d5fc973a522c8909d60be6a201869d46aa47b030b8813f60616404628c2b94",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://9755b505799e622d964a843a8ed1fd60fedffca230178e5cb95ae9280df4dcd2",
+				"dweb:/ipfs/QmRkhUYUUgRZ2QYJjmtQct2ubyYwS3bdUMhbuFYM12VfYn"
+			]
+		},
+		"ownable/Ownable.sol": {
+			"keccak256": "0x673b1da37f2744f44a9deb6a48a75634f35acb19cca8802ff92df829e381b0ed",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://9e33fb87c6b3d834d9c884d96f9afb2259b765e1a31cec90bc1808e0a57e98d9",
+				"dweb:/ipfs/Qmct4JbYxL1HEDQ6odktWtNUsRC6jxx6eDmbmuSpnVspZs"
+			]
+		},
+		"ownable/Ownable2Step.sol": {
+			"keccak256": "0x2dea0183b9f457f9827b30a5c07797252fe348a52b7bb65b3391c6a3ae9f159a",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://32647c7ad298438546cdedb9d16827fd1616a19717189cd580c76252c17c2632",
+				"dweb:/ipfs/QmXdTR2C8uGedwnaZi81gKRc6rU8fpC4oAmSPLMHSrn96c"
+			]
+		}
+	},
+	"version": 1
+}
