@@ -22,7 +22,7 @@ import { getProvider } from "./web3";
 export interface PluginMetadata {
   name: string;
   version: string;
-  requiredPermissions: number;
+  requiredPermissions: BigInt;
   iconUrl: string;
   appUrl: string;
   description: string;

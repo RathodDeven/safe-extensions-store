@@ -9,6 +9,7 @@ import Header from "./components/Header";
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import InstalledExtensiosn from "./routes/installed/InstalledExtensiosn";
 import PluginPage from "./routes/plugin/PluginPage";
+import LexicalWrapper from "./components/Lexical/LexicalWrapper";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -16,17 +17,19 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Router>
-      <div className="w-screen h-screen overflow-auto bg-p-bg text-p-text hide-scrollbar">
-        <Header />
-        <div className="p-16 flex flex-row justify-center w-full">
-          <Routes>
-            <Route path="/" Component={PluginList} />
-            <Route path="/plugin/:pluginAddress" Component={PluginPage} />
-            <Route path="/relay/:pluginAddress" Component={RelayPlugin} />
-            <Route path="/installed" Component={InstalledExtensiosn} />
-          </Routes>
+      <LexicalWrapper>
+        <div className="w-screen h-screen overflow-auto bg-p-bg text-p-text hide-scrollbar">
+          <Header />
+          <div className="p-16 flex flex-row justify-center w-full">
+            <Routes>
+              <Route path="/" Component={PluginList} />
+              <Route path="/plugin/:pluginAddress" Component={PluginPage} />
+              <Route path="/relay/:pluginAddress" Component={RelayPlugin} />
+              <Route path="/installed" Component={InstalledExtensiosn} />
+            </Routes>
+          </div>
         </div>
-      </div>
+      </LexicalWrapper>
     </Router>
   </React.StrictMode>
 );

@@ -108,7 +108,7 @@ export const loadEnabledPlugins = async (): Promise<string[]> => {
 
 const buildEnablePlugin = async (
   plugin: string,
-  requiredPermissions: number
+  requiredPermissions: BigInt
 ): Promise<BaseTransaction> => {
   const manager = await getManager();
   const tx = {
@@ -128,7 +128,7 @@ const buildEnablePlugin = async (
 
 export const enablePlugin = async (
   plugin: string,
-  requiredPermissions: number
+  requiredPermissions: BigInt
 ) => {
   if (!(await isConnectedToSafe())) throw Error("Not connected to a Safe");
   const manager = await getManager();

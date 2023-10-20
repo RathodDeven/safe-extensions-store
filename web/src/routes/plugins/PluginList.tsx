@@ -37,7 +37,6 @@ const PluginList = () => {
   }, []);
   return (
     <div className="w-2/3 py-8">
-      <div>Plugin Lists</div>
       <div className="w-full w-full grid grid-cols-3 gap-8 items-stretch ">
         {plugins.map((plugin) => (
           <Plugin key={plugin} address={plugin} />
