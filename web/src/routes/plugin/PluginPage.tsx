@@ -6,10 +6,12 @@ import clsx from "clsx";
 import { publicFileUrl } from "../../logic/utils";
 import { getListOfPermission } from "../../logic/permissions";
 import Markup from "../../components/Lexical/Markup";
+import { usePluginStore } from "../../logic/store/pluginStore";
 
 const PluginPage = () => {
   const { pluginAddress } = useParams();
   const { details } = usePluginDetails(pluginAddress);
+  const setPlugin = usePluginStore((state) => state.addPlugin);
   const [enabled, setEnabled] = React.useState<undefined | boolean>(undefined);
 
   console.log("enabled", enabled);
@@ -25,10 +27,18 @@ const PluginPage = () => {
     try {
       if (enabled) {
         await disablePlugin(pluginAddress);
+        setPlugin(pluginAddress, {
+          ...details,
+          enabled: false,
+        });
         setEnabled(false);
       } else {
         // await enablePlugin(pluginAddress, details.metadata.requiresRootAccess);
         await enablePlugin(pluginAddress, details.metadata.requiredPermissions);
+        setPlugin(pluginAddress, {
+          ...details,
+          enabled: true,
+        });
         setEnabled(true);
       }
     } catch (e) {
