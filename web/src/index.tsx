@@ -11,6 +11,8 @@ import InstalledExtensiosn from "./routes/installed/InstalledExtensiosn";
 import PluginPage from "./routes/plugin/PluginPage";
 import LexicalWrapper from "./components/Lexical/LexicalWrapper";
 import SubmitPlugin from "./routes/create/SubmitPlugin";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -19,6 +21,11 @@ root.render(
   <React.StrictMode>
     <Router>
       <LexicalWrapper>
+        <ToastContainer
+          position="bottom-right"
+          theme="dark"
+          closeButton={false}
+        />
         <div className="w-screen h-screen overflow-auto bg-p-bg text-p-text hide-scrollbar">
           <Header />
           <div className="p-16 flex flex-row justify-center w-full">

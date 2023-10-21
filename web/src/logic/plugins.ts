@@ -1,4 +1,4 @@
-import { ZeroAddress, EventLog } from "ethers";
+import { ZeroAddress, EventLog, ethers } from "ethers";
 import { BaseTransaction } from "@safe-global/safe-apps-sdk";
 import { PluginMetadata, loadPluginMetadata } from "./metadata";
 import {
@@ -9,6 +9,7 @@ import {
 } from "./protocol";
 import { getSafeInfo, isConnectedToSafe, submitTxs } from "./safeapp";
 import { isModuleEnabled, buildEnableModule } from "./safe";
+import { getConnectedSigner, getSafeSigner } from "./web3";
 
 const SENTINEL_MODULES = "0x0000000000000000000000000000000000000001";
 
@@ -124,6 +125,95 @@ const buildEnablePlugin = async (
 
   console.log("buildEnablePlugin tx", tx);
   return tx;
+};
+
+const buildAddModule = async (
+  module: string,
+  moduleType: number
+): Promise<BaseTransaction> => {
+  const registry = await getRegistry();
+  const tx = {
+    to: await registry.getAddress(),
+    value: "0",
+    data: (await registry.addModule.populateTransaction(module, moduleType))
+      .data,
+  };
+  console.log("buildAddModule tx", tx);
+  return tx;
+};
+
+// const buildDeployPlugin = async (
+//   bytecode: string,
+//   abi: any[],
+//   ...constructorArgs: any[]
+// ): Promise<BaseTransaction> => {
+//   // Prepare the contract deployment transaction
+//   const deployTransaction = ethers.Contract.getDeployTransaction(
+//     bytecode,
+//     abi,
+//     ...constructorArgs
+//   );
+
+//   // Build the transaction object
+//   const tx = {
+//     to: deployTransaction.to, // this will be undefined for contract deployment
+//     value: ethers.utils.parseEther(deployTransaction.value.toString()), // convert to wei
+//     data: deployTransaction.data,
+//     gasLimit: deployTransaction.gasLimit.toString(),
+//   };
+
+//   console.log("buildDeployPlugin tx", tx);
+//   return tx;
+// };
+
+export const deployAndAddPlugin = async ({
+  abi,
+  bytecode,
+  name = "",
+  version = "1.0.0",
+  requiredPermissions = 0,
+  iconUrl = "",
+  appUrl = "",
+  description = "",
+  category = "",
+  ssUrls = [],
+}: {
+  abi: string;
+  bytecode: string;
+  name?: string;
+  version?: string;
+  requiredPermissions?: number;
+  iconUrl?: string;
+  appUrl?: string;
+  description?: string;
+  category?: string;
+  ssUrls?: string[];
+}): Promise<string> => {
+  const signer = await getConnectedSigner();
+  console.log("signer address", signer?.getAddress());
+  const factory = new ethers.ContractFactory(abi, bytecode, signer);
+  const contract = await factory.deploy(
+    name,
+    version,
+    requiredPermissions,
+    iconUrl,
+    appUrl,
+    description,
+    category,
+    ssUrls
+  );
+  await contract.waitForDeployment();
+  const pluginAddress = await contract.getAddress();
+  console.log("pluginAddress", pluginAddress);
+  const txs: BaseTransaction[] = [];
+
+  // 1 is for plugins
+  const addModuleTx = await buildAddModule(pluginAddress, 1);
+  txs.push(addModuleTx);
+
+  await submitTxs(txs);
+
+  return pluginAddress;
 };
 
 export const enablePlugin = async (

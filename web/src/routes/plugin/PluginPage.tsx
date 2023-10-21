@@ -121,7 +121,7 @@ const PluginPage = () => {
         )}
       >
         {details?.metadata?.ssUrls?.map((url) => (
-          <img src={url} className="h-[350px] rounded-md" />
+          <img src={url} className="h-[350px] rounded-xl" />
         ))}
       </div>
 

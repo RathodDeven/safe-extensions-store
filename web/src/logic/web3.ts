@@ -15,6 +15,12 @@ export const getJsonProvider = async (): Promise<AbstractProvider> => {
   return new ethers.JsonRpcProvider(PROTOCOL_PUBLIC_RPC);
 };
 
+export const getSafeSigner = async (): Promise<ethers.Signer | null> => {
+  const provider = await getSafeAppsProvider();
+  if (!provider) return null;
+  return provider?.getSigner();
+};
+
 export const getConnectedProvider = async (): Promise<
   ethers.BrowserProvider | undefined
 > => {
@@ -33,13 +39,20 @@ export const getConnectedProvider = async (): Promise<
       name: "Base Goerli",
     });
 
-    await provider.send("eth_requestAccounts", []);
-
     return provider;
   }
 };
 
 export const getConnectedSigner = async (): Promise<ethers.Signer | null> => {
+  if (!(await isConnectedToSafe())) {
+    // @ts-ignore
+    if (window?.ethereum) {
+      // connect to metamask
+      // @ts-ignore
+      await window.ethereum.request({ method: "eth_requestAccounts" });
+    }
+  }
+
   const provider = await getConnectedProvider();
   if (!provider) return null;
   return provider?.getSigner();

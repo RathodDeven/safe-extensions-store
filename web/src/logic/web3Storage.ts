@@ -19,5 +19,5 @@ export const uploadFilesAndGetCids = async (files: File[]) => {
 };
 
 export const cidToLink = (cid: string) => {
-  return `https:/${cid}.ipfs.dweb.link`;
+  return `https://${cid}.ipfs.dweb.link`;
 };

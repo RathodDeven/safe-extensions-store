@@ -4,6 +4,10 @@ import { BsCardImage } from "react-icons/bs";
 import { cidToLink, uploadFilesAndGetCids } from "../../logic/web3Storage";
 import ToggleButton from "../../components/ToggleButton";
 import PublicationEditor from "../../components/Lexical/PublicationEditor";
+import { deployAndAddPlugin } from "../../logic/plugins";
+import { useNavigate } from "react-router-dom";
+
+import { toast } from "react-toastify";
 
 const categories = [
   "Social",
@@ -31,6 +35,8 @@ const SubmitPlugin = () => {
   const [pluginAbi, setPluginAbi] = React.useState<string>("");
   const [pluginBytecode, setPluginBytecode] = React.useState<string>("");
 
+  const [uploadingImages, setUploadingImages] = React.useState<boolean>(false);
+
   const [executeCallPermission, setExecuteCallPermission] =
     React.useState<boolean>(false);
 
@@ -40,7 +46,72 @@ const SubmitPlugin = () => {
   const [executeDelegatePermission, setExecuteDelegatePermission] =
     React.useState<boolean>(false);
 
-  const handleSubmit = async () => {};
+  const navigate = useNavigate();
+
+  const handleSubmit = async () => {
+    setLoading(true);
+
+    try {
+      // get requiredPermission number
+      let requiredPermissions = 0;
+
+      if (executeCallPermission) {
+        requiredPermissions += 1;
+      }
+
+      if (callToSelfPermission) {
+        requiredPermissions += 2;
+      }
+
+      if (executeDelegatePermission) {
+        requiredPermissions += 4;
+      }
+
+      const abi = JSON.parse(pluginAbi);
+
+      console.log("submit object", {
+        abi: abi,
+        bytecode: pluginBytecode,
+        appUrl,
+        category,
+        description,
+        iconUrl: iconLink,
+        name,
+        ssUrls,
+        version,
+        requiredPermissions,
+      });
+
+      const pluginAddress = await toast.promise(
+        deployAndAddPlugin({
+          abi: abi,
+          bytecode: pluginBytecode,
+          appUrl,
+          category,
+          description,
+          iconUrl: iconLink,
+          name,
+          ssUrls,
+          version,
+          requiredPermissions,
+        }),
+        {
+          pending: "Deploying plugin...",
+          success: "Plugin deployed successfully!",
+          error: "Error deploying plugin",
+        }
+      );
+
+      console.log("pluginAddress", pluginAddress);
+
+      // redirect to plugin page
+      navigate(`/plugin/${pluginAddress}`);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="bg-s-bg w-1/2 p-12 rounded-xl border border-p-text/10 h-full">
@@ -49,6 +120,7 @@ const SubmitPlugin = () => {
           {icon ? (
             <img
               src={icon}
+              alt="icon"
               className="shrink-0 object-cover w-24 h-24 rounded-full shadow-sm mb-3"
             />
           ) : (
@@ -89,7 +161,9 @@ const SubmitPlugin = () => {
             className="px-4 py-2 outline-none bg-t-bg rounded-xl border border-p-text/10 mb-3"
           >
             {categories.map((category) => (
-              <option value={category}>{category}</option>
+              <option key={category} value={category}>
+                {category}
+              </option>
             ))}
           </select>
         </div>
@@ -167,6 +241,8 @@ const SubmitPlugin = () => {
         {ssUrlsToShow.map((ssUrl) => (
           <img
             src={ssUrl}
+            key={ssUrl}
+            alt="ss"
             className="h-[100px] w-[200px] rounded-xl object-cover"
           />
         ))}
@@ -213,7 +289,7 @@ const SubmitPlugin = () => {
       <button
         className="px-8 py-2 mt-4 bg-p-h rounded-xl text-p-bg font-bold hover:bg-p-h/60 transition-all duration-300"
         onClick={handleSubmit}
-        disabled={loading}
+        disabled={loading || uploadingImages}
       >
         {loading ? "Deploying..." : "Deploy & Add"}
       </button>
@@ -222,29 +298,41 @@ const SubmitPlugin = () => {
         type="file"
         id="icon"
         onChange={async (e) => {
+          setUploadingImages(true);
           const filePicked = e.target.files?.[0];
           if (!filePicked) return;
           setIcon(URL.createObjectURL(filePicked));
 
-          const cids = await uploadFilesAndGetCids([filePicked]);
+          const cids = await toast.promise(
+            uploadFilesAndGetCids([filePicked]),
+            {
+              pending: "Uploading icon to Web3 Storage...",
+              success: "Icon uploaded!",
+              error: "Error uploading icon to Web3 Storage",
+            }
+          );
           console.log("cids", cids);
 
           if (cids?.length === 0) return;
           // @ts-ignore
           const cidLink = cidToLink(cids[0]);
           setIconLink(cidLink);
+          setUploadingImages(false);
         }}
         // only accept images
         accept="image/*"
         // only accept one file
         multiple={false}
         hidden
+        disabled={uploadingImages || loading}
       />
 
       <input
         type="file"
         id="ss"
+        disabled={uploadingImages || loading}
         onChange={async (e) => {
+          setUploadingImages(true);
           const filesPicked = e.target.files;
           if (!filesPicked) return;
 
@@ -253,13 +341,22 @@ const SubmitPlugin = () => {
             ssUrlsToShowSet((prev) => [...prev, URL.createObjectURL(file)]);
           }
 
-          const cids = await uploadFilesAndGetCids(Array.from(filesPicked));
+          const cids = await toast.promise(
+            uploadFilesAndGetCids(Array.from(filesPicked)),
+            {
+              pending: "Uploading Screen Shots to Web3 Storage...",
+              success: "Screen Shots uploaded!",
+              error: "Error uploading Screen Shots to Web3 Storage",
+            }
+          );
           console.log("cids", cids);
 
           if (cids?.length === 0) return;
           // @ts-ignore
           const cidLinks = cids.map(cidToLink);
           ssUrlsSet([...ssUrls, ...cidLinks]);
+
+          setUploadingImages(false);
         }}
         // only accept images
         accept="image/*"

@@ -7,10 +7,15 @@ import { Signer } from "ethers";
 const Header = () => {
   const { pathname } = useLocation();
   const [signer, setSigner] = useState<Signer | null>(null);
+  const [address, setAddress] = useState<string>("");
 
   useEffect(() => {
     const fetchData = async () => {
+      // if connect to
       const signer = await getConnectedSigner();
+      if (!signer) return;
+      const addr = await signer.getAddress();
+      setAddress(addr);
       setSigner(signer);
     };
     fetchData();
@@ -55,6 +60,12 @@ const Header = () => {
         >
           <div>Add Plugin</div>
         </Link>
+
+        {address && (
+          <div className="text-s-text font-semibold text-lg">
+            {address.slice(0, 6)}...{address.slice(-4)}
+          </div>
+        )}
       </div>
     </header>
   );
