@@ -18,14 +18,9 @@ import clsx from "clsx";
 interface Props {
   setContent: (content: string) => void;
   onPaste?: (files: File[]) => void;
-  isComment?: boolean;
 }
 const TRANSFORMERS = [...TEXT_FORMAT_TRANSFORMERS];
-const PublicationEditor = ({
-  setContent,
-  onPaste,
-  isComment = false,
-}: Props) => {
+const PublicationEditor = ({ setContent, onPaste }: Props) => {
   return (
     <div className="relative">
       {/* todo toolbar for rich text editor */}
@@ -35,29 +30,23 @@ const PublicationEditor = ({
           <ContentEditable
             className={clsx(
               "blocktext-p-text overflow-auto  outline-none bg-s-bg",
-              isComment
-                ? "min-h-[20px] max-h-[200px] sm:max-h-[250px]"
-                : " min-h-[70px] max-h-[300px] sm:max-h-[350px]  px-4 py-2 border border-s-border rounded-xl m-4"
+              " min-h-[150px] max-h-[400px] px-4 py-2 bg-t-bg border  border-p-text/10 rounded-xl"
             )}
           />
         }
         placeholder={
           <div
             className={clsx(
-              "text-gray-400 absolute pointer-events-none whitespace-nowrap",
-              isComment ? "left-0 top-0 sm:left-0" : "px-4 top-2 left-4 "
+              "text-s-text text-sm font-semibold absolute top-[8px] left-[16px] pointer-events-none whitespace-nowrap"
             )}
           >
-            {isComment ? (
-              "Say it...."
-            ) : (
-              <>
-                <div>What's this about...? ( optional )</div>
-                <div className="text-xs">
-                  Tip: type @ and profile handle to tag them{" "}
-                </div>
-              </>
-            )}
+            <>
+              <div>- Detailed overview of the plugin</div>
+
+              <div>- Add links wherever necessary</div>
+
+              <div>- Can use markdown here</div>
+            </>
           </div>
         }
         ErrorBoundary={() => <div>Something went wrong !</div>}

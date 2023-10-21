@@ -102,11 +102,11 @@ const PluginPage = () => {
             <div className="ml-1">(2.3k ratings)</div>
           </div>
         </div>
-        <div className="flex flex-row flex-wrap text-s-text font-bold text-xs my-2 gap-x-4">
+        <div className="flex flex-row flex-wrap text-p-text font-bold text-xs my-2 gap-x-4">
           {details?.metadata?.requiredPermissions &&
             getListOfPermission(details?.metadata?.requiredPermissions).map(
               (permission) => (
-                <div className="rounded-md bg-s-bg px-2 py-1 border-s-text/10 shadow-xl border">
+                <div className="rounded-md bg-t-bg px-2 py-1 border-s-text/10 shadow-xl border">
                   {permission}
                 </div>
               )

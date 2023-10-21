@@ -10,6 +10,7 @@ import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import InstalledExtensiosn from "./routes/installed/InstalledExtensiosn";
 import PluginPage from "./routes/plugin/PluginPage";
 import LexicalWrapper from "./components/Lexical/LexicalWrapper";
+import SubmitPlugin from "./routes/create/SubmitPlugin";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -26,6 +27,7 @@ root.render(
               <Route path="/plugin/:pluginAddress" Component={PluginPage} />
               <Route path="/relay/:pluginAddress" Component={RelayPlugin} />
               <Route path="/installed" Component={InstalledExtensiosn} />
+              <Route path="/add-plugin" Component={SubmitPlugin} />
             </Routes>
           </div>
         </div>

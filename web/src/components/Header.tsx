@@ -1,9 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import clsx from "clsx";
 import { Link, useLocation } from "react-router-dom";
 import { publicFileUrl } from "../logic/utils";
+import { getConnectedSigner } from "../logic/web3";
+import { Signer } from "ethers";
 const Header = () => {
   const { pathname } = useLocation();
+  const [signer, setSigner] = useState<Signer | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const signer = await getConnectedSigner();
+      setSigner(signer);
+    };
+    fetchData();
+  }, []);
+
   return (
     <header className="fixed top-0 left-0 right-0 py-3 px-32 backdrop-blur-sm flex flex-row justify-between items-center">
       <div className="flex flex-row items-center space-x-8">
@@ -30,6 +42,18 @@ const Header = () => {
           )}
         >
           <div>Installed</div>
+        </Link>
+      </div>
+
+      <div className="flex flex-row items-center space-x-8">
+        <Link
+          to="/add-plugin"
+          className={clsx(
+            "text-lg font-medium hover:text-p-text transition-all duration-300",
+            pathname === "/add-plugin" ? "text-p-text" : "text-s-text"
+          )}
+        >
+          <div>Add Plugin</div>
         </Link>
       </div>
     </header>
