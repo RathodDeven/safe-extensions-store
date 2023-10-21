@@ -1,6 +1,7 @@
 // TODO: switch to api-kit once Ethers v6 is supported
 import { getAddress, BigNumberish } from "ethers";
 import axios from "axios";
+import { TX_SERVICE_URL } from "./constants";
 
 export type Page<T> = {
   readonly count: number;
@@ -50,14 +51,8 @@ export type SafeMultisigTransaction = {
   readonly signatures?: string;
 };
 
-const SAFE_TX_SERVISAFE_TX_SERVICE_BASECE_BASE =
-  "https://safe-transaction-base-testnet.safe.global/api/";
-
 const multisigTxsEndpoint = (safe: string) => {
-  return (
-    SAFE_TX_SERVISAFE_TX_SERVICE_BASECE_BASE +
-    `v1/safes/${getAddress(safe)}/multisig-transactions/`
-  );
+  return TX_SERVICE_URL + `v1/safes/${getAddress(safe)}/multisig-transactions/`;
 };
 
 export const getSafeMultisigTxs = async (

@@ -14,6 +14,8 @@
     "@safe-global/safe-apps-provider": "^0.17.1",
     "@safe-global/safe-apps-sdk": "^8.0.0",
     "@safe-global/safe-core-protocol": "^0.1.0-alpha.4",
+    "@safe-global/safe-core-sdk-types": "^2.3.0",
+    "@safe-global/safe-react-components": "^2.0.6",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
@@ -27,6 +29,7 @@
     "@web3auth/openlogin-adapter": "^4.3.0",
     "axios": "^1.4.0",
     "blockies-ts": "^1.0.0",
+    "browserify-zlib": "^0.2.0",
     "clsx": "^2.0.0",
     "ethers": "^6.6.3",
     "interweave": "^13.1.0",
@@ -43,9 +46,9 @@
     "zustand": "^4.4.3"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
     "eject": "react-scripts eject",
     "deploy": "yarn build && gh-pages -d build"
   },
@@ -68,7 +71,18 @@
     ]
   },
   "devDependencies": {
+    "assert": "^2.1.0",
+    "buffer": "^6.0.3",
+    "crypto-browserify": "^3.12.0",
     "gh-pages": "^5.0.0",
-    "tailwindcss": "^3.3.3"
+    "https-browserify": "^1.0.0",
+    "os-browserify": "^0.3.0",
+    "process": "^0.11.10",
+    "react-app-rewired": "^2.2.1",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
+    "tailwindcss": "^3.3.3",
+    "url": "^0.11.3",
+    "zlib": "^1.0.5"
   }
 }
