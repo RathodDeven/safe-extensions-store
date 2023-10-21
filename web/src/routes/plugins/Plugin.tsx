@@ -5,6 +5,8 @@ import "./Plugins.css";
 import { Link } from "react-router-dom";
 import { usePluginDetails } from "../../hooks/usePluginDetails";
 import { getListOfPermission } from "../../logic/permissions";
+import { Image } from "@mui/icons-material";
+import ImageWithPulsingLoader from "../../components/ImageWithPulsingLoader";
 
 export type PluginProps = {
   address: string;
@@ -32,15 +34,15 @@ export const Plugin: FunctionComponent<PluginProps> = ({ address }) => {
         pathname: "/plugin/" + address,
       }}
     >
-      <div className="rounded-md hover:border-p-h bg-s-bg cursor-pointer shadow-xl border-transparent border-[1px] transition-colors duration-300 ease-in-out p-6 flex flex-col">
+      <div className="rounded-md h-full hover:border-p-h bg-s-bg cursor-pointer shadow-xl border-transparent border-[1px] transition-colors duration-300 ease-in-out p-6 flex flex-col">
         {details?.metadata?.ssUrls?.length === 0 ? (
-          <img
+          <ImageWithPulsingLoader
             src={details?.metadata?.iconUrl || blocky}
             alt="blocky"
             className="w-12 h-12 rounded-full shadow-sm mb-3"
           />
         ) : (
-          <img
+          <ImageWithPulsingLoader
             src={details?.metadata?.ssUrls[0]}
             alt="ss"
             className="w-full h-[50%] rounded-md shadow-sm mb-3"
@@ -62,7 +64,7 @@ export const Plugin: FunctionComponent<PluginProps> = ({ address }) => {
           {details?.metadata?.description || "No description provided"}
         </div>
 
-        <div className="flex flex-row flex-wrap text-p-text font-bold text-xs my-1 gap-x-4">
+        <div className="flex flex-row flex-wrap text-p-text font-bold text-xs my-1 gap-4">
           {details?.metadata?.requiredPermissions &&
             getListOfPermission(details?.metadata?.requiredPermissions!).map(
               (permission) => (

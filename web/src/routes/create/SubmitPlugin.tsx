@@ -8,6 +8,7 @@ import { addPlugin, deployPlugin } from "../../logic/plugins";
 import { useNavigate } from "react-router-dom";
 
 import { toast } from "react-toastify";
+import ImageWithPulsingLoader from "../../components/ImageWithPulsingLoader";
 
 const categories = [
   "Social",
@@ -125,7 +126,7 @@ const SubmitPlugin = () => {
       <div className="flex flex-row items-center space-x-6 w-full">
         <label htmlFor="icon" className="cursor-pointer shrink-0">
           {icon ? (
-            <img
+            <ImageWithPulsingLoader
               src={icon}
               alt="icon"
               className="shrink-0 object-cover w-24 h-24 rounded-full shadow-sm mb-3"
@@ -246,7 +247,7 @@ const SubmitPlugin = () => {
         </label>
 
         {ssUrlsToShow.map((ssUrl) => (
-          <img
+          <ImageWithPulsingLoader
             src={ssUrl}
             key={ssUrl}
             alt="ss"

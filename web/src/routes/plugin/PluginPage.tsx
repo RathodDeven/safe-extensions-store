@@ -7,6 +7,7 @@ import { publicFileUrl } from "../../logic/utils";
 import { getListOfPermission } from "../../logic/permissions";
 import Markup from "../../components/Lexical/Markup";
 import { usePluginStore } from "../../logic/store/pluginStore";
+import ImageWithPulsingLoader from "../../components/ImageWithPulsingLoader";
 
 const PluginPage = () => {
   const { pluginAddress } = useParams();
@@ -61,7 +62,7 @@ const PluginPage = () => {
       <div className="w-2/3 py-8">
         <div className="flex flex-row items-center justify-between">
           <div className="flex flex-row items-center space-x-8">
-            <img
+            <ImageWithPulsingLoader
               src={details?.metadata?.iconUrl || publicFileUrl("/logo.png")}
               className="w-12 h-12 rounded-full shadow-sm"
             />
@@ -121,7 +122,7 @@ const PluginPage = () => {
         )}
       >
         {details?.metadata?.ssUrls?.map((url) => (
-          <img src={url} className="h-[350px] rounded-xl" />
+          <ImageWithPulsingLoader src={url} className="h-[350px] rounded-xl" />
         ))}
       </div>
 
