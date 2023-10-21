@@ -9,7 +9,7 @@ import {
 } from "./protocol";
 import { getSafeInfo, isConnectedToSafe, submitTxs } from "./safeapp";
 import { isModuleEnabled, buildEnableModule } from "./safe";
-import { getConnectedSigner, getSafeSigner } from "./web3";
+import { getBrowserSigner, getConnectedSigner, getSafeSigner } from "./web3";
 
 const SENTINEL_MODULES = "0x0000000000000000000000000000000000000001";
 
@@ -142,31 +142,7 @@ const buildAddModule = async (
   return tx;
 };
 
-// const buildDeployPlugin = async (
-//   bytecode: string,
-//   abi: any[],
-//   ...constructorArgs: any[]
-// ): Promise<BaseTransaction> => {
-//   // Prepare the contract deployment transaction
-//   const deployTransaction = ethers.Contract.getDeployTransaction(
-//     bytecode,
-//     abi,
-//     ...constructorArgs
-//   );
-
-//   // Build the transaction object
-//   const tx = {
-//     to: deployTransaction.to, // this will be undefined for contract deployment
-//     value: ethers.utils.parseEther(deployTransaction.value.toString()), // convert to wei
-//     data: deployTransaction.data,
-//     gasLimit: deployTransaction.gasLimit.toString(),
-//   };
-
-//   console.log("buildDeployPlugin tx", tx);
-//   return tx;
-// };
-
-export const deployAndAddPlugin = async ({
+export const deployPlugin = async ({
   abi,
   bytecode,
   name = "",
@@ -189,7 +165,7 @@ export const deployAndAddPlugin = async ({
   category?: string;
   ssUrls?: string[];
 }): Promise<string> => {
-  const signer = await getConnectedSigner();
+  const signer = await getBrowserSigner();
   console.log("signer address", signer?.getAddress());
   const factory = new ethers.ContractFactory(abi, bytecode, signer);
   const contract = await factory.deploy(
@@ -205,6 +181,14 @@ export const deployAndAddPlugin = async ({
   await contract.waitForDeployment();
   const pluginAddress = await contract.getAddress();
   console.log("pluginAddress", pluginAddress);
+
+  return pluginAddress;
+};
+
+export const addPlugin = async (pluginAddress: string) => {
+  if (!(await isConnectedToSafe()))
+    throw Error("Not connected to a Safe, unable to add plugin");
+
   const txs: BaseTransaction[] = [];
 
   // 1 is for plugins

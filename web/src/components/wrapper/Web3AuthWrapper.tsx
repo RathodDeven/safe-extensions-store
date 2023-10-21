@@ -8,7 +8,6 @@ import {
 } from "@web3auth/base";
 import { OpenloginAdapter } from "@web3auth/openlogin-adapter";
 import { Web3AuthOptions } from "@web3auth/modal";
-import { EthHashInfo } from "@safe-global/safe-react-components";
 import { Web3AuthModalPack, AuthKitSignInData } from "@safe-global/auth-kit";
 import {
   PROTOCOL_CHAIN_ID,

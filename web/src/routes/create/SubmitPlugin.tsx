@@ -4,7 +4,7 @@ import { BsCardImage } from "react-icons/bs";
 import { cidToLink, uploadFilesAndGetCids } from "../../logic/web3Storage";
 import ToggleButton from "../../components/ToggleButton";
 import PublicationEditor from "../../components/Lexical/PublicationEditor";
-import { deployAndAddPlugin } from "../../logic/plugins";
+import { addPlugin, deployPlugin } from "../../logic/plugins";
 import { useNavigate } from "react-router-dom";
 
 import { toast } from "react-toastify";
@@ -83,7 +83,7 @@ const SubmitPlugin = () => {
       });
 
       const pluginAddress = await toast.promise(
-        deployAndAddPlugin({
+        deployPlugin({
           abi: abi,
           bytecode: pluginBytecode,
           appUrl,
@@ -104,9 +104,16 @@ const SubmitPlugin = () => {
 
       console.log("pluginAddress", pluginAddress);
 
+      await toast.promise(addPlugin(pluginAddress), {
+        pending: "Adding plugin...",
+        success: "Plugin added successfully!",
+        error: "Error adding plugin",
+      });
+
       // redirect to plugin page
       navigate(`/plugin/${pluginAddress}`);
     } catch (error) {
+      toast.error("Error deploying plugin");
       console.log(error);
     } finally {
       setLoading(false);

@@ -57,3 +57,22 @@ export const getConnectedSigner = async (): Promise<ethers.Signer | null> => {
   if (!provider) return null;
   return provider?.getSigner();
 };
+
+export const getBrowserSigner = async (): Promise<ethers.Signer | null> => {
+  // @ts-ignore
+  if (!window?.ethereum) return null;
+
+  // @ts-ignore
+  // connect to metamask
+  // @ts-ignore
+  await window.ethereum.request({ method: "eth_requestAccounts" });
+
+  // @ts-ignore
+  // @ts-ignore
+  const provider = new ethers.BrowserProvider(window.ethereum, {
+    chainId: 84531,
+    name: "Base Goerli",
+  });
+
+  return provider?.getSigner();
+};
