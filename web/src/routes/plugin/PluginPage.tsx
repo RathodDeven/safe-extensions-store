@@ -1,33 +1,51 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { usePluginDetails } from "../../hooks/usePluginDetails";
-import { disablePlugin, enablePlugin } from "../../logic/plugins";
+import { disablePlugin, enablePlugin, flagPlugin } from "../../logic/plugins";
 import clsx from "clsx";
 import { publicFileUrl } from "../../logic/utils";
 import { getListOfPermission } from "../../logic/permissions";
 import Markup from "../../components/Lexical/Markup";
 import { usePluginStore } from "../../logic/store/pluginStore";
 import ImageWithPulsingLoader from "../../components/ImageWithPulsingLoader";
+import { useUser } from "../../components/wrapper/UserProvider";
+import { toast } from "react-toastify";
+import { getRegistry } from "../../logic/protocol";
 
 const PluginPage = () => {
   const { pluginAddress } = useParams();
   const { details } = usePluginDetails(pluginAddress);
   const setPlugin = usePluginStore((state) => state.addPlugin);
   const [enabled, setEnabled] = React.useState<undefined | boolean>(undefined);
+  const [isRemoved, setIsRemoved] = React.useState<boolean>(false);
   const installedPLugins = usePluginStore((state) => state.installedPlugins);
   const setInstalledPlugins = usePluginStore(
     (state) => state.setInstalledPlugins
   );
+  const discoveredPlugins = usePluginStore((state) => state.discoveredPlugins);
+  const setDiscoverPlugins = usePluginStore(
+    (state) => state.setDiscoveredPlugins
+  );
 
-  console.log("enabled", enabled);
+  const removedPlugins = usePluginStore((state) => state.removedPlugins);
+  const setRemovedPlugins = usePluginStore((state) => state.setRemovedPlugins);
+
+  const { isOwnerOfRegistry } = useUser();
+
+  const checkIsRemoved = React.useCallback(async () => {
+    if (!pluginAddress) return;
+    const registry = await getRegistry();
+    const data = await registry.listedModules(pluginAddress);
+    console.log("data", data);
+    setIsRemoved(Boolean(data[1]));
+  }, [pluginAddress]);
 
   React.useEffect(() => {
-    console.log("details", details);
+    checkIsRemoved();
     setEnabled(details?.enabled);
   }, [details?.enabled]);
 
   const handleToggle = React.useCallback(async () => {
-    console.log("handleToggle details", details);
     if (enabled === undefined || !pluginAddress || !details) return;
     try {
       if (enabled) {
@@ -37,7 +55,9 @@ const PluginPage = () => {
           enabled: false,
         });
         setInstalledPlugins(
-          installedPLugins.filter((plugin) => plugin !== pluginAddress)
+          installedPLugins.filter(
+            (plugin) => plugin.toLowerCase() !== pluginAddress.toLowerCase()
+          )
         );
         setEnabled(false);
       } else {
@@ -70,20 +90,68 @@ const PluginPage = () => {
               {details.metadata.name}
             </div>
           </div>
-          <button
-            className={clsx(
-              "rounded-full shrink-0 ml-8 px-8 text-sm py-2.5 text-p-bg font-bold hover:bg-p-h/60 transition-all duration-300",
-              enabled === undefined
-                ? "bg-p-h/60 cursor-not-allowed"
-                : enabled
-                ? "bg-red-500 cursor-pointer"
-                : "bg-p-h cursor-pointer"
+
+          <div className="flex flex-row items-center space-x-4">
+            {/* remove plugin button */}
+            {isOwnerOfRegistry && pluginAddress && !isRemoved && (
+              <button
+                className="rounded-full shrink-0 ml-8 px-8 text-sm py-2.5 text-s-bg font-bold bg-red-300 hover:bg-red-400 transition-all duration-300"
+                onClick={async () => {
+                  try {
+                    await toast.promise(flagPlugin(pluginAddress), {
+                      error: "Error removing plugin",
+                      success: "Plugin removed successfully",
+                      pending: "Removing plugin",
+                    });
+                  } catch (e) {
+                    console.warn(e);
+                  }
+
+                  // remove pluginAddress from discovered plugins & installed plugins
+                  setDiscoverPlugins(
+                    discoveredPlugins.filter(
+                      (plugin) =>
+                        plugin.toLowerCase() !== pluginAddress.toLowerCase()
+                    )
+                  );
+
+                  setInstalledPlugins(
+                    installedPLugins.filter(
+                      (plugin) =>
+                        plugin.toLowerCase() !== pluginAddress.toLowerCase()
+                    )
+                  );
+
+                  setRemovedPlugins([...removedPlugins, pluginAddress]);
+
+                  setIsRemoved(true);
+                }}
+              >
+                Remove from Store
+              </button>
             )}
-            disabled={enabled === undefined}
-            onClick={handleToggle}
-          >
-            {enabled ? "Remove from Safe" : "Add to Safe"}
-          </button>
+
+            {isRemoved ? (
+              <div className="text-red-400 font-semibold text-lg">
+                Removed from Store
+              </div>
+            ) : (
+              <button
+                className={clsx(
+                  "rounded-full shrink-0 ml-8 px-8 text-sm py-2.5 text-p-bg font-bold hover:bg-p-h/60 transition-all duration-300",
+                  enabled === undefined
+                    ? "bg-p-h/60 cursor-not-allowed"
+                    : enabled
+                    ? "bg-red-500 cursor-pointer"
+                    : "bg-p-h cursor-pointer"
+                )}
+                disabled={enabled === undefined}
+                onClick={handleToggle}
+              >
+                {enabled ? "Remove from Safe" : "Add to Safe"}
+              </button>
+            )}
+          </div>
         </div>
         <div className="flex flex-row items-center gap-x-4 text-lg m-2">
           {details?.metadata?.appUrl && (
@@ -126,20 +194,40 @@ const PluginPage = () => {
         ))}
       </div>
 
-      {/* description */}
-
       <div className="w-2/3 py-8">
+        {/* description */}
         {details?.metadata?.description && (
           <>
             <div className="text-2xl font-semibold my-4">Overview</div>
 
             <Markup
-              className={`whitespace-pre-wrap break-words text-base text-s-text font-semibold w-full`}
+              className={`whitespace-pre-wrap break-words text-base text-p-text w-full`}
             >
               {details?.metadata?.description}
             </Markup>
           </>
         )}
+
+        {/* line */}
+        <div className="w-full h-px bg-s-text/30 my-8" />
+
+        {/* details */}
+
+        <div className="text-2xl font-semibold my-4">Details</div>
+
+        <div className="flex flex-row flex-wrap ">
+          <div className="space-y-1">
+            <div className="font-semibold text-p-text text-lg">Version</div>
+            <div className="text-s-text font-normal">
+              {details?.metadata?.version}
+            </div>
+          </div>
+
+          {/* <div>
+            <div className="font-semibold text-p-text">Author</div>
+            <div className="text-p-text">{details?.metadata?.updated}</div>
+          </div> */}
+        </div>
       </div>
     </div>
   );

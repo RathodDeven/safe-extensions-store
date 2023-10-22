@@ -13,6 +13,8 @@ import LexicalWrapper from "./components/Lexical/LexicalWrapper";
 import SubmitPlugin from "./routes/create/SubmitPlugin";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import UserProvider from "./components/wrapper/UserProvider";
+import RemovedPlugins from "./routes/removed/RemovedPlugins";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -20,25 +22,28 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Router>
-      <LexicalWrapper>
-        <ToastContainer
-          position="bottom-right"
-          theme="dark"
-          closeButton={false}
-        />
-        <div className="w-screen h-screen overflow-auto bg-p-bg text-p-text hide-scrollbar">
-          <Header />
-          <div className="p-16 flex flex-row justify-center w-full">
-            <Routes>
-              <Route path="/" Component={PluginList} />
-              <Route path="/plugin/:pluginAddress" Component={PluginPage} />
-              <Route path="/relay/:pluginAddress" Component={RelayPlugin} />
-              <Route path="/installed" Component={InstalledExtensiosn} />
-              <Route path="/add-plugin" Component={SubmitPlugin} />
-            </Routes>
+      <UserProvider>
+        <LexicalWrapper>
+          <ToastContainer
+            position="bottom-right"
+            theme="dark"
+            closeButton={false}
+          />
+          <div className="w-screen h-screen overflow-auto bg-p-bg text-p-text hide-scrollbar">
+            <Header />
+            <div className="p-16 flex flex-row justify-center w-full">
+              <Routes>
+                <Route path="/" Component={PluginList} />
+                <Route path="/plugin/:pluginAddress" Component={PluginPage} />
+                <Route path="/relay/:pluginAddress" Component={RelayPlugin} />
+                <Route path="/installed" Component={InstalledExtensiosn} />
+                <Route path="/add-plugin" Component={SubmitPlugin} />
+                <Route path="/removed" Component={RemovedPlugins} />
+              </Routes>
+            </div>
           </div>
-        </div>
-      </LexicalWrapper>
+        </LexicalWrapper>
+      </UserProvider>
     </Router>
   </React.StrictMode>
 );

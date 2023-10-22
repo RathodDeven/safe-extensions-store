@@ -79,6 +79,7 @@ const loadPluginMetadataFromEvent = async (
     address: provider,
     topics: eventInterface.encodeFilterTopics("Metadata", [metadataHash]),
   });
+  console.log("events", events);
   if (events.length === 0) throw Error("Metadata not found");
   const metadataEvent = events[events.length - 1];
   const decodedEvent = eventInterface.decodeEventLog(
@@ -125,6 +126,7 @@ export const decodePluginMetadata = (
   data: string,
   pluginAddress?: string
 ): PluginMetadata => {
+  console.log("data", data);
   if (!isHexString(data)) throw Error("Invalid data format");
   const format = data.slice(2, 6);
   if (format !== "0000") throw Error("Unsupported format or format version");

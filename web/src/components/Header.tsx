@@ -1,25 +1,10 @@
-import React, { useEffect, useState } from "react";
 import clsx from "clsx";
 import { Link, useLocation } from "react-router-dom";
 import { publicFileUrl } from "../logic/utils";
-import { getConnectedSigner } from "../logic/web3";
-import { Signer } from "ethers";
+import { useUser } from "./wrapper/UserProvider";
 const Header = () => {
   const { pathname } = useLocation();
-  const [signer, setSigner] = useState<Signer | null>(null);
-  const [address, setAddress] = useState<string>("");
-
-  useEffect(() => {
-    const fetchData = async () => {
-      // if connect to
-      const signer = await getConnectedSigner();
-      if (!signer) return;
-      const addr = await signer.getAddress();
-      setAddress(addr);
-      setSigner(signer);
-    };
-    fetchData();
-  }, []);
+  const { address, isOwnerOfRegistry } = useUser();
 
   return (
     <header className="fixed top-0 left-0 right-0 py-3 px-32 backdrop-blur-sm flex flex-row justify-between items-center">
@@ -48,6 +33,18 @@ const Header = () => {
         >
           <div>Installed</div>
         </Link>
+
+        {isOwnerOfRegistry && (
+          <Link
+            to="/removed"
+            className={clsx(
+              "text-lg font-medium ",
+              pathname === "/removed" ? "text-p-text" : "text-s-text"
+            )}
+          >
+            <div>Removed</div>
+          </Link>
+        )}
       </div>
 
       <div className="flex flex-row items-center space-x-8">

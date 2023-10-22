@@ -5,6 +5,7 @@ import {
   getManager,
   getPlugin,
   getRegistry,
+  getRegistryFromConnectedProvider,
   // getRegistryFromJsonProvider,
 } from "./protocol";
 import { getSafeInfo, isConnectedToSafe, submitTxs } from "./safeapp";
@@ -87,6 +88,17 @@ export const loadPlugins = async (
   return addedModules.filter((module) => flaggedModules.indexOf(module) < 0);
 };
 
+export const loadFlaggedPlugins = async (): Promise<string[]> => {
+  const registry = await getRegistry();
+  // const registry = await getRegistryFromJsonProvider();
+  const flaggedEvents = (await registry.queryFilter(
+    registry.filters.ModuleFlagged,
+    11130728
+  )) as EventLog[];
+
+  return flaggedEvents.map((event: EventLog) => event.args.module);
+};
+
 export const isPluginEnabled = async (plugin: string) => {
   if (!(await isConnectedToSafe())) throw Error("Not connected to a Safe");
   const manager = await getManager();
@@ -124,21 +136,6 @@ const buildEnablePlugin = async (
   };
 
   console.log("buildEnablePlugin tx", tx);
-  return tx;
-};
-
-const buildAddModule = async (
-  module: string,
-  moduleType: number
-): Promise<BaseTransaction> => {
-  const registry = await getRegistry();
-  const tx = {
-    to: await registry.getAddress(),
-    value: "0",
-    data: (await registry.addModule.populateTransaction(module, moduleType))
-      .data,
-  };
-  console.log("buildAddModule tx", tx);
   return tx;
 };
 
@@ -185,17 +182,73 @@ export const deployPlugin = async ({
   return pluginAddress;
 };
 
+const buildAddModule = async (
+  module: string,
+  moduleType: number
+): Promise<BaseTransaction> => {
+  const registry = await getRegistry();
+  const tx = {
+    to: await registry.getAddress(),
+    value: "0",
+    data: (await registry.addModule.populateTransaction(module, moduleType))
+      .data,
+  };
+  console.log("buildAddModule tx", tx);
+  return tx;
+};
+
 export const addPlugin = async (pluginAddress: string) => {
-  if (!(await isConnectedToSafe()))
-    throw Error("Not connected to a Safe, unable to add plugin");
+  if (await isConnectedToSafe()) {
+    const txs: BaseTransaction[] = [];
 
-  const txs: BaseTransaction[] = [];
+    // 1 is for plugins
+    const addModuleTx = await buildAddModule(pluginAddress, 1);
+    txs.push(addModuleTx);
 
-  // 1 is for plugins
-  const addModuleTx = await buildAddModule(pluginAddress, 1);
-  txs.push(addModuleTx);
+    await submitTxs(txs);
 
-  await submitTxs(txs);
+    return pluginAddress;
+  }
+
+  // assuming connected to metamask
+  const registry = await getRegistryFromConnectedProvider();
+  const tx = await registry.addModule(pluginAddress, 1);
+
+  // wait for the transaction to be mined
+  await tx.wait();
+
+  return pluginAddress;
+};
+
+const buildFlagModule = async (pluginAddress: string) => {
+  const registry = await getRegistry();
+  const tx = {
+    to: await registry.getAddress(),
+    value: "0",
+    data: (await registry.flagModule.populateTransaction(pluginAddress)).data,
+  };
+  console.log("buildFlagModule tx", tx);
+  return tx;
+};
+
+export const flagPlugin = async (pluginAddress: string): Promise<string> => {
+  if (await isConnectedToSafe()) {
+    const txs: BaseTransaction[] = [];
+
+    // 1 is for plugins
+    const flagModuleTx = await buildFlagModule(pluginAddress);
+    txs.push(flagModuleTx);
+
+    await submitTxs(txs);
+
+    return pluginAddress;
+  }
+
+  // assuming connected to metamask
+  const registryMetamask = await getRegistryFromConnectedProvider();
+  const tx = await registryMetamask.flagModule(pluginAddress);
+
+  await tx.wait();
 
   return pluginAddress;
 };

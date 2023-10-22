@@ -7,7 +7,6 @@ export const getProvider = async (): Promise<AbstractProvider> => {
   //   console.log("Use SafeAppsProvider");
   //   return await getSafeAppsProvider();
   // }
-  console.log("Use JsonRpcProvider");
   return new ethers.JsonRpcProvider(PROTOCOL_PUBLIC_RPC);
 };
 
@@ -25,11 +24,8 @@ export const getConnectedProvider = async (): Promise<
   ethers.BrowserProvider | undefined
 > => {
   if (await isConnectedToSafe()) {
-    console.log("Use SafeAppsProvider");
     return await getSafeAppsProvider();
   }
-
-  console.log("Use Web3Provider");
 
   // @ts-ignore
   if (window?.ethereum) {
@@ -44,18 +40,23 @@ export const getConnectedProvider = async (): Promise<
 };
 
 export const getConnectedSigner = async (): Promise<ethers.Signer | null> => {
-  if (!(await isConnectedToSafe())) {
-    // @ts-ignore
-    if (window?.ethereum) {
-      // connect to metamask
+  try {
+    if (!(await isConnectedToSafe())) {
       // @ts-ignore
-      await window.ethereum.request({ method: "eth_requestAccounts" });
+      if (window?.ethereum) {
+        // connect to metamask
+        // @ts-ignore
+        await window.ethereum.request({ method: "eth_requestAccounts" });
+      }
     }
-  }
 
-  const provider = await getConnectedProvider();
-  if (!provider) return null;
-  return provider?.getSigner();
+    const provider = await getConnectedProvider();
+    if (!provider) return null;
+    return provider?.getSigner();
+  } catch (e) {
+    console.log(e);
+  }
+  return null;
 };
 
 export const getBrowserSigner = async (): Promise<ethers.Signer | null> => {

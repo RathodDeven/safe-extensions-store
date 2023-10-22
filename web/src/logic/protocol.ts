@@ -1,5 +1,10 @@
 import { Interface, ethers } from "ethers";
-import { getJsonProvider, getProvider } from "./web3";
+import {
+  getConnectedProvider,
+  getConnectedSigner,
+  getJsonProvider,
+  getProvider,
+} from "./web3";
 import { deployedContracts } from "./contract-info/deployment";
 
 const Metadata_PROVIDER_ABI = [
@@ -23,6 +28,13 @@ export const getRegistryFromJsonProvider = async () => {
   const registryInfo =
     deployedContracts[84531][0].contracts.TestSafeProtocolRegistryUnrestricted;
   return new ethers.Contract(registryInfo.address, registryInfo.abi, provider);
+};
+
+export const getRegistryFromConnectedProvider = async () => {
+  const signer = await getConnectedSigner();
+  const registryInfo =
+    deployedContracts[84531][0].contracts.TestSafeProtocolRegistryUnrestricted;
+  return new ethers.Contract(registryInfo.address, registryInfo.abi, signer);
 };
 
 export const getRegistry = async () => {

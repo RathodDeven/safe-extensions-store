@@ -16,6 +16,8 @@ export const usePluginDetails = (
     try {
       if (!address) return;
       const plugin = await loadPluginDetails(address);
+      // get the creator of the plugin
+
       setDetails(plugin);
       addPlugin(address, plugin);
     } catch (e) {

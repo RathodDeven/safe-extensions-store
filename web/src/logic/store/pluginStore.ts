@@ -14,6 +14,8 @@ interface PluginStore {
   setDiscoveredPlugins: (discoveredPlugins: string[]) => void;
   installedPlugins: string[];
   setInstalledPlugins: (installedPlugins: string[]) => void;
+  removedPlugins: string[];
+  setRemovedPlugins: (removedPlugins: string[]) => void;
 }
 
 export const usePluginStore = create<PluginStore>((set) => ({
@@ -38,4 +40,7 @@ export const usePluginStore = create<PluginStore>((set) => ({
   installedPlugins: [],
   setInstalledPlugins: (installedPlugins: string[]) =>
     set((state) => ({ installedPlugins })),
+  removedPlugins: [],
+  setRemovedPlugins: (removedPlugins: string[]) =>
+    set((state) => ({ removedPlugins })),
 }));
