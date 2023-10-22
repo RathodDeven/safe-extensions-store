@@ -111,7 +111,7 @@ const getExecuteTxData = async (
       safeTx.refundReceiver || ZERO_ADDRESS,
       buildSignatureBytes(safeTx.confirmations!!)
     )
-  ).data;
+  ).data!;
 };
 
 export const buildExecuteTx = async (

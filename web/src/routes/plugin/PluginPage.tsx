@@ -106,7 +106,10 @@ const PluginPage = () => {
         <div className="flex flex-row items-center justify-between">
           <div className="flex flex-row items-center space-x-8">
             <ImageWithPulsingLoader
-              src={details?.metadata?.iconUrl || publicFileUrl("/logo.png")}
+              src={
+                details?.metadata?.iconUrl ||
+                publicFileUrl("/safe_store_logo.png")
+              }
               className="w-12 h-12 rounded-full shadow-sm"
             />
             <div className="text-3xl font-semibold word-wrap">
