@@ -19,6 +19,8 @@ export const getSafeInfo = async () => {
   return cachedSafeInfo;
 };
 
+export const getSafeSdk = () => safeAppsSDK;
+
 export const isConnectedToSafe = async () => {
   try {
     const safeInfo = await Promise.race([

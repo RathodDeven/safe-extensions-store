@@ -6,7 +6,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
-    "@gelatonetwork/relay-sdk": "^3.1.0",
+    "@gelatonetwork/relay-sdk": "^3.5.0",
     "@lexical/react": "^0.12.2",
     "@mui/icons-material": "^5.14.0",
     "@mui/material": "^5.14.0",

@@ -60,7 +60,7 @@ const PluginPage = () => {
     if (!pluginAddress) return;
     const registry = await getRegistry();
     const data = await registry.listedModules(pluginAddress);
-    setIsRemoved(Boolean(data[1]));
+    setIsRemoved(Boolean(data[1].toNumber()));
   }, [pluginAddress]);
 
   React.useEffect(() => {
@@ -218,6 +218,7 @@ const PluginPage = () => {
           <ImageWithPulsingLoader
             key={url}
             src={url}
+            loaderClassName="w-[700px]"
             className="h-[350px] rounded-xl"
           />
         ))}

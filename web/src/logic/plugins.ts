@@ -10,8 +10,9 @@ import {
 } from "./protocol";
 import { getSafeInfo, isConnectedToSafe, submitTxs } from "./safeapp";
 import { isModuleEnabled, buildEnableModule } from "./safe";
-import { getBrowserSigner, getConnectedSigner, getSafeSigner } from "./web3";
-import { ZERO_ADDRESS } from "./constants";
+import { getBrowserSigner } from "./web3";
+import { PROTOCOL_CHAIN_ID, STARTING_BLOCK, ZERO_ADDRESS } from "./constants";
+import { sponsoredCall } from "./gelato-sponsered";
 
 const SENTINEL_MODULES = "0x0000000000000000000000000000000000000001";
 
@@ -68,11 +69,13 @@ export const loadPlugins = async (
   filterFlagged: boolean = true
 ): Promise<string[]> => {
   const registry = await getRegistry();
+
+  console.log("registry", registry.address);
   // const registry = await getRegistryFromJsonProvider();
   const addedEvents = (await registry.queryFilter(
     // @ts-ignore
     "ModuleAdded",
-    11130728,
+    STARTING_BLOCK,
     "latest"
   )) as EventLog[];
 
@@ -83,7 +86,7 @@ export const loadPlugins = async (
   const flaggedEvents = (await registry.queryFilter(
     // @ts-ignore
     "ModuleFlagged",
-    11130728
+    STARTING_BLOCK
   )) as EventLog[];
 
   const flaggedModules = flaggedEvents.map(
@@ -127,25 +130,6 @@ export const loadEnabledPlugins = async (): Promise<string[]> => {
   return paginatedPlugins.array;
 };
 
-const buildEnablePlugin = async (
-  plugin: string,
-  requiredPermissions: BigInt
-): Promise<BaseTransaction> => {
-  const manager = await getManager();
-  const tx = {
-    to: manager.address,
-    value: "0",
-    data: (
-      await manager.enablePlugin.populateTransaction(
-        plugin,
-        requiredPermissions
-      )
-    ).data,
-  };
-
-  return tx;
-};
-
 export const deployPlugin = async ({
   abi,
   bytecode,
@@ -171,6 +155,7 @@ export const deployPlugin = async ({
 }): Promise<string> => {
   const signer = await getBrowserSigner();
   if (!signer) throw Error("No signer found");
+
   const factory = new ethers.ContractFactory(abi, bytecode, signer);
   const contract = await factory.deploy(
     name,
@@ -182,7 +167,7 @@ export const deployPlugin = async ({
     category,
     ssUrls
   );
-  await contract.waitForDeployment();
+  await contract.deployed();
   const pluginAddress = contract.address;
 
   return pluginAddress;
@@ -192,12 +177,12 @@ const buildAddModule = async (
   module: string,
   moduleType: number
 ): Promise<BaseTransaction> => {
-  const registry = await getRegistry();
+  const registry = await getRegistryFromConnectedProvider();
   const tx = {
     to: registry.address,
     value: "0",
-    data: (await registry.addModule.populateTransaction(module, moduleType))
-      .data,
+    data: (await registry.populateTransaction.addModule(module, moduleType))
+      .data!,
   };
   return tx;
 };
@@ -215,38 +200,52 @@ export const addPlugin = async (pluginAddress: string) => {
     return pluginAddress;
   }
 
-  // assuming connected to metamask
-  const registry = await getRegistryFromConnectedProvider();
-  const tx = await registry.addModule(pluginAddress, 1);
+  const addModuleTx = await buildAddModule(pluginAddress, 1);
 
-  // wait for the transaction to be mined
-  await tx.wait();
+  const gelatoStatus = await sponsoredCall({
+    chainId: PROTOCOL_CHAIN_ID,
+    data: addModuleTx.data,
+    target: addModuleTx.to,
+  });
+
+  console.log("gelatoStatus", gelatoStatus);
 
   return pluginAddress;
 };
 
 const buildFlagModule = async (pluginAddress: string) => {
-  const registry = await getRegistry();
+  const registry = await getRegistryFromConnectedProvider();
   const tx = {
     to: registry.address,
     value: "0",
-    data: (await registry.flagModule.populateTransaction(pluginAddress)).data,
+    data: (await registry.populateTransaction.flagModule(pluginAddress)).data,
   };
   return tx;
 };
 
 export const flagPlugin = async (pluginAddress: string): Promise<string> => {
+  const flagModuleTx = await buildFlagModule(pluginAddress);
+
   if (await isConnectedToSafe()) {
     const txs: BaseTransaction[] = [];
 
     // 1 is for plugins
-    const flagModuleTx = await buildFlagModule(pluginAddress);
+
+    // @ts-ignore
     txs.push(flagModuleTx);
 
     await submitTxs(txs);
 
     return pluginAddress;
   }
+
+  // const gelatoStatus = await sponsoredCall({
+  //   chainId: PROTOCOL_CHAIN_ID,
+  //   data: flagModuleTx.data!,
+  //   target: flagModuleTx.to,
+  // });
+
+  // console.log("gelatoStatus", gelatoStatus);
 
   // assuming connected to metamask
   const registryMetamask = await getRegistryFromConnectedProvider();
@@ -255,6 +254,26 @@ export const flagPlugin = async (pluginAddress: string): Promise<string> => {
   await tx.wait();
 
   return pluginAddress;
+};
+
+const buildEnablePlugin = async (
+  plugin: string,
+  requiredPermissions: BigInt
+): Promise<BaseTransaction> => {
+  const manager = await getManager();
+  const tx = {
+    to: manager.address,
+    value: "0",
+    data: (
+      await manager.populateTransaction.enablePlugin(
+        plugin,
+        requiredPermissions
+      )
+    ).data,
+  };
+
+  // @ts-ignore
+  return tx;
 };
 
 export const enablePlugin = async (
@@ -276,42 +295,6 @@ export const enablePlugin = async (
   await submitTxs(txs);
 };
 
-// const buildEnablePlugin = async (
-//   plugin: string,
-//   requiresRootAccess: boolean
-// ): Promise<BaseTransaction> => {
-//   const manager = await getManager();
-//   const tx = {
-//     to: await manager.getAddress(),
-//     value: "0",
-//     data: (
-//       await manager.enablePlugin.populateTransaction(plugin, requiresRootAccess)
-//     ).data,
-//   };
-
-//   console.log("buildEnablePlugin tx", tx);
-//   return tx;
-// };
-
-// export const enablePlugin = async (
-//   plugin: string,
-//   requiresRootAccess: boolean
-// ) => {
-//   if (!(await isConnectedToSafe())) throw Error("Not connected to a Safe");
-//   const manager = await getManager();
-//   const managerAddress = await manager.getAddress();
-//   const info = await getSafeInfo();
-//   const txs: BaseTransaction[] = [];
-//   if (!(await isModuleEnabled(info.safeAddress, managerAddress))) {
-//     txs.push(await buildEnableModule(info.safeAddress, managerAddress));
-//   }
-//   if (!(await isPluginEnabled(plugin))) {
-//     txs.push(await buildEnablePlugin(plugin, requiresRootAccess));
-//   }
-//   if (txs.length === 0) return;
-//   await submitTxs(txs);
-// };
-
 const buildDisablePlugin = async (
   pointer: string,
   plugin: string
@@ -320,7 +303,8 @@ const buildDisablePlugin = async (
   return {
     to: manager.address,
     value: "0",
-    data: (await manager.disablePlugin.populateTransaction(pointer, plugin))
+    // @ts-ignore
+    data: (await manager.populateTransaction.disablePlugin(pointer, plugin))
       .data,
   };
 };

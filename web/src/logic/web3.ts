@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import { getSafeAppsProvider, isConnectedToSafe } from "./safeapp";
-import { PROTOCOL_PUBLIC_RPC } from "./constants";
+import { PROTOCOL_CHAIN_ID, PROTOCOL_PUBLIC_RPC } from "./constants";
 
 export const getProvider = async (): Promise<ethers.providers.Provider> => {
   // if (await isConnectedToSafe()) {
@@ -31,8 +31,8 @@ export const getConnectedProvider = async (): Promise<
   if (window?.ethereum) {
     // @ts-ignore
     const provider = new ethers.providers.Web3Provider(window.ethereum, {
-      chainId: 84531,
-      name: "Base Goerli",
+      chainId: Number(PROTOCOL_CHAIN_ID),
+      name: "Polygon",
     });
 
     return provider;
@@ -71,8 +71,8 @@ export const getBrowserSigner = async (): Promise<ethers.Signer | null> => {
   // @ts-ignore
   // @ts-ignore
   const provider = new ethers.providers.Web3Provider(window.ethereum, {
-    chainId: 84531,
-    name: "Base Goerli",
+    chainId: Number(PROTOCOL_CHAIN_ID),
+    name: "Polygon",
   });
 
   return provider?.getSigner();

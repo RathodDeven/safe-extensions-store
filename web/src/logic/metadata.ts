@@ -2,6 +2,7 @@ import { ethers } from "ethers";
 import { getMetadataProvider } from "./protocol";
 import { getProvider } from "./web3";
 import { defaultAbiCoder } from "ethers/lib/utils";
+import { STARTING_BLOCK } from "./constants";
 
 const AbiCoder = ethers.utils.AbiCoder;
 const Contract = ethers.Contract;
@@ -77,7 +78,7 @@ const loadPluginMetadataFromEvent = async (
   const web3Provider = await getProvider();
   const eventInterface = new Interface(MetadataEvent);
   const events = await web3Provider.getLogs({
-    fromBlock: 11162991,
+    fromBlock: STARTING_BLOCK,
     toBlock: "latest",
     address: provider,
     topics: eventInterface.encodeFilterTopics("Metadata", [metadataHash]),

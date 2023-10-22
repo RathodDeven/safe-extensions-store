@@ -20,29 +20,34 @@
 				"inputs": [
 					{
 						"internalType": "address",
-						"name": "integration",
+						"name": "module",
 						"type": "address"
+					},
+					{
+						"internalType": "uint8",
+						"name": "moduleTypes",
+						"type": "uint8"
 					}
 				],
-				"name": "CannotAddIntegration",
+				"name": "CannotAddModule",
 				"type": "error"
 			},
 			{
 				"inputs": [
 					{
 						"internalType": "address",
-						"name": "integration",
+						"name": "module",
 						"type": "address"
 					}
 				],
-				"name": "CannotFlagIntegration",
+				"name": "CannotFlagModule",
 				"type": "error"
 			},
 			{
 				"inputs": [
 					{
 						"internalType": "address",
-						"name": "integration",
+						"name": "module",
 						"type": "address"
 					},
 					{
@@ -51,7 +56,7 @@
 						"type": "bytes4"
 					}
 				],
-				"name": "IntegrationDoesNotSupportExpectedInterfaceId",
+				"name": "ModuleDoesNotSupportExpectedInterfaceId",
 				"type": "error"
 			},
 			{
@@ -60,11 +65,11 @@
 					{
 						"indexed": true,
 						"internalType": "address",
-						"name": "integration",
+						"name": "module",
 						"type": "address"
 					}
 				],
-				"name": "IntegrationAdded",
+				"name": "ModuleAdded",
 				"type": "event"
 			},
 			{
@@ -73,11 +78,11 @@
 					{
 						"indexed": true,
 						"internalType": "address",
-						"name": "integration",
+						"name": "module",
 						"type": "address"
 					}
 				],
-				"name": "IntegrationFlagged",
+				"name": "ModuleFlagged",
 				"type": "event"
 			},
 			{
@@ -129,16 +134,16 @@
 				"inputs": [
 					{
 						"internalType": "address",
-						"name": "integration",
+						"name": "module",
 						"type": "address"
 					},
 					{
-						"internalType": "enum Enum.IntegrationType",
-						"name": "integrationType",
+						"internalType": "uint8",
+						"name": "moduleType",
 						"type": "uint8"
 					}
 				],
-				"name": "addIntegration",
+				"name": "addModule",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -147,8 +152,13 @@
 				"inputs": [
 					{
 						"internalType": "address",
-						"name": "integration",
+						"name": "module",
 						"type": "address"
+					},
+					{
+						"internalType": "bytes32",
+						"name": "data",
+						"type": "bytes32"
 					}
 				],
 				"name": "check",
@@ -171,11 +181,11 @@
 				"inputs": [
 					{
 						"internalType": "address",
-						"name": "integration",
+						"name": "module",
 						"type": "address"
 					}
 				],
-				"name": "flagIntegration",
+				"name": "flagModule",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -188,7 +198,7 @@
 						"type": "address"
 					}
 				],
-				"name": "listedIntegrations",
+				"name": "listedModules",
 				"outputs": [
 					{
 						"internalType": "uint64",
@@ -201,8 +211,8 @@
 						"type": "uint64"
 					},
 					{
-						"internalType": "enum Enum.IntegrationType",
-						"name": "integrationType",
+						"internalType": "uint8",
+						"name": "moduleTypes",
 						"type": "uint8"
 					}
 				],
@@ -258,7 +268,7 @@
 						"type": "bool"
 					}
 				],
-				"stateMutability": "view",
+				"stateMutability": "pure",
 				"type": "function"
 			},
 			{
@@ -281,24 +291,24 @@
 				"acceptOwnership()": {
 					"details": "The new owner accepts the ownership transfer."
 				},
-				"addIntegration(address,uint8)": {
+				"addModule(address,uint8)": {
 					"params": {
-						"integration": "Address of the integration",
-						"integrationType": "Enum.IntegrationType indicating the type of integration"
+						"module": "Address of the module",
+						"moduleType": "Enum.ModuleType indicating the type of module"
 					}
 				},
-				"check(address)": {
+				"check(address,bytes32)": {
 					"params": {
-						"integration": "Address of the integration to be checked"
+						"module": "Address of the module to be checked"
 					},
 					"returns": {
-						"flaggedAt": "Timestamp of falgging the integration. This value will be 0 if not flagged.",
-						"listedAt": "Timestamp of listing the integration. This value will be 0 if not listed."
+						"flaggedAt": "Timestamp of falgging the module. This value will be 0 if not flagged.",
+						"listedAt": "Timestamp of listing the module. This value will be 0 if not listed."
 					}
 				},
-				"flagIntegration(address)": {
+				"flagModule(address)": {
 					"params": {
-						"integration": "Address of the integration"
+						"module": "Address of the module"
 					}
 				},
 				"owner()": {
@@ -317,20 +327,20 @@
 					"details": "Starts the ownership transfer of the contract to a new account. Replaces the pending transfer if there is one. Can only be called by the current owner."
 				}
 			},
-			"title": "This is a test version of SafeProtocolRegistry that does not restrict any account from adding Integrations.        This contract is only for testing purposes and not meant for production use.        The onlyOwner function modifier of `addIntegration(address,Enum.IntegrationType)` has been removed to allow        developers to add any Integration to the resgistry.",
+			"title": "This is a test version of SafeProtocolRegistry that does not restrict any account from adding Modules.        This contract is only for testing purposes and not meant for production use.        The onlyOwner function modifier of `addModule(address,Enum.ModuleType)` has been removed to allow        developers to add any Module to the resgistry.",
 			"version": 1
 		},
 		"userdoc": {
 			"kind": "user",
 			"methods": {
-				"addIntegration(address,uint8)": {
-					"notice": "Allows any account to add a integration. A integration can be any address including zero address for now.         This function does not permit adding a integration twice. This function validates if integration supports expected interfaceId."
+				"addModule(address,uint8)": {
+					"notice": "Allows any account to add a module. A module can be any address including zero address for now.         This function does not permit adding a module twice. This function validates if module supports expected interfaceId."
 				},
-				"check(address)": {
-					"notice": "This function returns information about a integration"
+				"check(address,bytes32)": {
+					"notice": "This function returns information about a module"
 				},
-				"flagIntegration(address)": {
-					"notice": "Allows only owner to flad a integration. Only previously added integration can be flagged.         This function does not permit flagging a integration twice.         A integration can be any address including zero address for now."
+				"flagModule(address)": {
+					"notice": "Allows only owner to flad a module. Only previously added module can be flagged.         This function does not permit flagging a module twice.         A module can be any address including zero address for now."
 				}
 			},
 			"version": 1
@@ -369,35 +379,43 @@
 			]
 		},
 		"SafeProtocolRegistry.sol": {
-			"keccak256": "0x5369862a2ad7e91386c5f48d5ec2696f5f8ae7ca516ca094d3a3242441397de6",
+			"keccak256": "0xf3811eebfa9a732556ee40951e372ec5bcb80d5db3ab327e1a49558ca69e65e0",
 			"license": "LGPL-3.0-only",
 			"urls": [
-				"bzz-raw://3178d73d40200a06053de089bab13fadc65b7b2488eb6968cdfc6a4a5ef7ad5b",
-				"dweb:/ipfs/QmXP35iCszZfLYDNtbnkFoFo3moFd6SJvxqGH3NS3i8rsA"
+				"bzz-raw://823c75146210e4e24e1fd2e44d15e298d71c8e57163bd1b49a566fe7713207df",
+				"dweb:/ipfs/QmbGt6UHaPdthEMF42GxHBka6CgQZsLJXJbsfwyvUsWf84"
+			]
+		},
+		"common/Constants.sol": {
+			"keccak256": "0x29117901074b212304c9caa729efdf5ce5c2017c482e40560316fb0e65cd7eef",
+			"license": "LGPL-3.0-only",
+			"urls": [
+				"bzz-raw://38043931eb6281dd49e13767fca8484a29738969702a1e194998d7a4a7abb3ef",
+				"dweb:/ipfs/QmQZLt2DTCeRoz3JXhRpGNiSFr88ogsGXREgniW272pHGs"
 			]
 		},
 		"common/Enum.sol": {
-			"keccak256": "0xf96606b2d5e0faf667ceb2ae0b29b617c99d8ad6d36b0e5db2aa4e6e10c18e28",
+			"keccak256": "0xce8d9443688c27d538ac8bc768ef13eadaaffd90b47603995ae60f26f48a3969",
 			"license": "LGPL-3.0-only",
 			"urls": [
-				"bzz-raw://936e5556c3bcfc7cffee8b362abf2b198871765219731f0ce03188ecce51e19e",
-				"dweb:/ipfs/QmYDebakEh2N344igmXv8JtAqMAktAm5TuW49RiCoNhvxK"
+				"bzz-raw://6f43dfad8a1cd06d16b26e12dfea50fe89265e069e795c5e2bcdc1a382234e73",
+				"dweb:/ipfs/QmXpEVLoCfKtyNRRnSfrohtqw1s5ocXbKwVxKNSv937fbK"
 			]
 		},
-		"interfaces/Integrations.sol": {
-			"keccak256": "0x6a8e85474431c7cff76528d144353a6d9d318cfbe7b6375423b6d4117c33b597",
+		"interfaces/Modules.sol": {
+			"keccak256": "0xd4604a7eb7642d5786e5a6afc4cf37f5b179a8f95a27d1cd0e0972f6894f2eb8",
 			"license": "LGPL-3.0-only",
 			"urls": [
-				"bzz-raw://4cb3d9a800e0de8ddc43cbdb249b9ffd69c14a750c389d7139f8231b189987ad",
-				"dweb:/ipfs/QmYrsATZ5L9XL28vgLqhWyb7hVQfhC45VRtA2A9jA7wXSA"
+				"bzz-raw://c1558203c5a97a11ebe1df26a305aa708adb5f88dca0e4d942fa4ff615a61067",
+				"dweb:/ipfs/QmPHpQbDM2rnVkqcRA6Pp2odLckZwAq13hFKSbWS5ZaQoV"
 			]
 		},
 		"interfaces/Registry.sol": {
-			"keccak256": "0x326d17098b54c6c7f777f329e7db6447e5955f69825b985167b9761d54191e46",
+			"keccak256": "0x866dde6d6df847f704e0474ceb67b8f006dc9da95317e284e70e8d9378cf8d23",
 			"license": "LGPL-3.0-only",
 			"urls": [
-				"bzz-raw://207b876255d60c9d3b78bac355817e7ff952c39bd2805c0f0e0fa0ce14fbffd1",
-				"dweb:/ipfs/QmNfaJgDfghYoPTumiLvy8TaZNfiNGDCLwENpDgsxmVq3m"
+				"bzz-raw://7b19a60ded218ec719b3df68995121c3d117e620180e18107cac2316a9c29dcb",
+				"dweb:/ipfs/QmY6uRhT3S18BtVDSmo8NmiKzAWu6r2MpuGMaByXSQRH4F"
 			]
 		},
 		"ownable/Context.sol": {
@@ -425,11 +443,11 @@
 			]
 		},
 		"test/TestSafeProtocolRegistryUnrestricted.sol": {
-			"keccak256": "0x041ef6e40b4540b8df72a0c526bf8e12cc8fe758ce61f2b9ccd5b6d8c6fd48ee",
+			"keccak256": "0xa3688d155eb977abe9968fec4de00cc54e48496be0d3d69ea9b62a3eb1796026",
 			"license": "LGPL-3.0-only",
 			"urls": [
-				"bzz-raw://2987cca8f3c3ac0200bb481ceb696db252df433002b4c38d483c34e0ba0484ae",
-				"dweb:/ipfs/QmduPU3o81Ts8TGSzsHfQQBttRqwHPQ7JvFpPZvBvt9wwD"
+				"bzz-raw://88e88c0515f5958c0e6cecb4ee129c2230ca200320980a3449ae1de5e39e366b",
+				"dweb:/ipfs/QmUVAua9wWt16duiujeduYLyLHvS5CHoozV2Uy3V34H2P4"
 			]
 		}
 	},
