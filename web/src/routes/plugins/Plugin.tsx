@@ -1,12 +1,11 @@
 import { FunctionComponent } from "react";
-import * as blockies from "blockies-ts";
 import "./Plugins.css";
 
 import { Link } from "react-router-dom";
 import { usePluginDetails } from "../../hooks/usePluginDetails";
 import { getListOfPermission } from "../../logic/permissions";
-import { Image } from "@mui/icons-material";
 import ImageWithPulsingLoader from "../../components/ImageWithPulsingLoader";
+import useAverageRating from "../../hooks/useAverageRating";
 
 export type PluginProps = {
   address: string;
@@ -14,8 +13,10 @@ export type PluginProps = {
 
 export const Plugin: FunctionComponent<PluginProps> = ({ address }) => {
   const { details } = usePluginDetails(address);
+  const { averageRating, nummberOfRatings } = useAverageRating({
+    pluginAddress: address,
+  });
   // console.log("details", details, "address", address, "blocky");
-  const blocky = blockies.create({ seed: address }).toDataURL();
 
   if (!details)
     return (
@@ -37,7 +38,7 @@ export const Plugin: FunctionComponent<PluginProps> = ({ address }) => {
       <div className="rounded-md h-full hover:border-p-h bg-s-bg cursor-pointer shadow-xl border-transparent border-[1px] transition-colors duration-300 ease-in-out p-6 flex flex-col">
         {details?.metadata?.ssUrls?.length === 0 ? (
           <ImageWithPulsingLoader
-            src={details?.metadata?.iconUrl || blocky}
+            src={details?.metadata?.iconUrl}
             alt="blocky"
             className="w-12 h-12 rounded-full shadow-sm mb-3"
           />
@@ -54,11 +55,12 @@ export const Plugin: FunctionComponent<PluginProps> = ({ address }) => {
           </div>
         </div>
 
-        {/* to be fetched from tableland */}
-        <div className="flex flex-row items-center text-sm py-1">
-          <div className="font-semibold">4.7 ⭐ </div>
-          <div className="text-s-text ml-1">(2.3k)</div>
-        </div>
+        {averageRating > 0 && (
+          <div className="flex flex-row items-center text-sm py-1">
+            <div className="font-semibold">{`${averageRating} ⭐ `}</div>
+            <div className="text-s-text ml-1">{`(${nummberOfRatings})`}</div>
+          </div>
+        )}
 
         <div className="line-clamp-2 text-s-text text-sm my-2 leading-relaxed">
           {details?.metadata?.description || "No description provided"}
