@@ -1,4 +1,4 @@
-import { ZeroAddress, EventLog, ethers } from "ethers";
+import { ethers } from "ethers";
 import { BaseTransaction } from "@safe-global/safe-apps-sdk";
 import { PluginMetadata, loadPluginMetadata } from "./metadata";
 import {
@@ -11,8 +11,11 @@ import {
 import { getSafeInfo, isConnectedToSafe, submitTxs } from "./safeapp";
 import { isModuleEnabled, buildEnableModule } from "./safe";
 import { getBrowserSigner, getConnectedSigner, getSafeSigner } from "./web3";
+import { ZERO_ADDRESS } from "./constants";
 
 const SENTINEL_MODULES = "0x0000000000000000000000000000000000000001";
+
+type EventLog = ethers.providers.Log;
 
 export interface PluginDetails {
   metadata: PluginMetadata;
@@ -36,24 +39,28 @@ export const loadPluginsOfIntegrations = async (
   const registry = await getRegistry();
   // const registry = await getRegistryFromJsonProvider();
   const addedEvents = (await registry.queryFilter(
+    // @ts-ignore
     registry.filters.IntegrationAdded,
     11218388,
     "latest"
-  )) as EventLog[];
+  )) as ethers.providers.Log[];
 
   console.log("addedEvents", addedEvents);
 
   const addedModules = addedEvents.map(
+    // @ts-ignore
     (event: EventLog) => event.args.integration
   );
 
   if (!filterFlagged) return addedModules;
   const flaggedEvents = (await registry.queryFilter(
+    //@ts-ignore
     registry.filters.IntegrationFlagged,
     11130728
   )) as EventLog[];
 
   const flaggedModules = flaggedEvents.map(
+    // @ts-ignore
     (event: EventLog) => event.args.integration
   );
 
@@ -66,22 +73,26 @@ export const loadPlugins = async (
   const registry = await getRegistry();
   // const registry = await getRegistryFromJsonProvider();
   const addedEvents = (await registry.queryFilter(
-    registry.filters.ModuleAdded,
+    // @ts-ignore
+    "ModuleAdded",
     11130728,
     "latest"
   )) as EventLog[];
 
   console.log("addedEvents", addedEvents);
 
+  // @ts-ignore
   const addedModules = addedEvents.map((event: EventLog) => event.args.module);
 
   if (!filterFlagged) return addedModules;
   const flaggedEvents = (await registry.queryFilter(
-    registry.filters.ModuleFlagged,
+    // @ts-ignore
+    "ModuleFlagged",
     11130728
   )) as EventLog[];
 
   const flaggedModules = flaggedEvents.map(
+    // @ts-ignore
     (event: EventLog) => event.args.module
   );
 
@@ -92,10 +103,12 @@ export const loadFlaggedPlugins = async (): Promise<string[]> => {
   const registry = await getRegistry();
   // const registry = await getRegistryFromJsonProvider();
   const flaggedEvents = (await registry.queryFilter(
-    registry.filters.ModuleFlagged,
+    // @ts-ignore
+    "ModuleFlagged",
     11130728
   )) as EventLog[];
 
+  // @ts-ignore
   return flaggedEvents.map((event: EventLog) => event.args.module);
 };
 
@@ -104,7 +117,7 @@ export const isPluginEnabled = async (plugin: string) => {
   const manager = await getManager();
   const safeInfo = await getSafeInfo();
   const pluginInfo = await manager.enabledPlugins(safeInfo.safeAddress, plugin);
-  return pluginInfo.nextPluginPointer !== ZeroAddress;
+  return pluginInfo.nextPluginPointer !== ZERO_ADDRESS;
 };
 
 export const loadEnabledPlugins = async (): Promise<string[]> => {
@@ -125,7 +138,7 @@ const buildEnablePlugin = async (
 ): Promise<BaseTransaction> => {
   const manager = await getManager();
   const tx = {
-    to: await manager.getAddress(),
+    to: manager.address,
     value: "0",
     data: (
       await manager.enablePlugin.populateTransaction(
@@ -163,7 +176,7 @@ export const deployPlugin = async ({
   ssUrls?: string[];
 }): Promise<string> => {
   const signer = await getBrowserSigner();
-  console.log("signer address", signer?.getAddress());
+  if (!signer) throw Error("No signer found");
   const factory = new ethers.ContractFactory(abi, bytecode, signer);
   const contract = await factory.deploy(
     name,
@@ -176,7 +189,7 @@ export const deployPlugin = async ({
     ssUrls
   );
   await contract.waitForDeployment();
-  const pluginAddress = await contract.getAddress();
+  const pluginAddress = contract.address;
   console.log("pluginAddress", pluginAddress);
 
   return pluginAddress;
@@ -188,7 +201,7 @@ const buildAddModule = async (
 ): Promise<BaseTransaction> => {
   const registry = await getRegistry();
   const tx = {
-    to: await registry.getAddress(),
+    to: registry.address,
     value: "0",
     data: (await registry.addModule.populateTransaction(module, moduleType))
       .data,
@@ -223,7 +236,7 @@ export const addPlugin = async (pluginAddress: string) => {
 const buildFlagModule = async (pluginAddress: string) => {
   const registry = await getRegistry();
   const tx = {
-    to: await registry.getAddress(),
+    to: registry.address,
     value: "0",
     data: (await registry.flagModule.populateTransaction(pluginAddress)).data,
   };
@@ -259,7 +272,7 @@ export const enablePlugin = async (
 ) => {
   if (!(await isConnectedToSafe())) throw Error("Not connected to a Safe");
   const manager = await getManager();
-  const managerAddress = await manager.getAddress();
+  const managerAddress = manager.address;
   const info = await getSafeInfo();
   const txs: BaseTransaction[] = [];
   if (!(await isModuleEnabled(info.safeAddress, managerAddress))) {
@@ -314,7 +327,7 @@ const buildDisablePlugin = async (
 ): Promise<BaseTransaction> => {
   const manager = await getManager();
   return {
-    to: await manager.getAddress(),
+    to: manager.address,
     value: "0",
     data: (await manager.disablePlugin.populateTransaction(pointer, plugin))
       .data,

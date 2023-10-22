@@ -1,13 +1,16 @@
-import {
-  AbiCoder,
-  Contract,
-  Interface,
-  isHexString,
-  keccak256,
-  getAddress,
-} from "ethers";
+import { ethers } from "ethers";
 import { getMetadataProvider } from "./protocol";
 import { getProvider } from "./web3";
+import { defaultAbiCoder } from "ethers/lib/utils";
+
+const AbiCoder = ethers.utils.AbiCoder;
+const Contract = ethers.Contract;
+const Interface = ethers.utils.Interface;
+const isHexString = ethers.utils.isHexString;
+const keccak256 = ethers.utils.keccak256;
+const getAddress = ethers.utils.getAddress;
+
+type ContractType = InstanceType<typeof ethers.Contract>;
 
 // export interface PluginMetadata {
 //   name: string;
@@ -32,8 +35,8 @@ export interface PluginMetadata {
 
 // const ProviderType_IPFS = BigInt(0);
 // const ProviderType_URL = BigInt(1);
-const ProviderType_Contract = BigInt(2);
-const ProviderType_Event = BigInt(3);
+const ProviderType_Contract = 2;
+const ProviderType_Event = 3;
 
 const MetadataEvent: string[] = [
   "event Metadata(bytes32 indexed metadataHash, bytes data)",
@@ -91,24 +94,40 @@ const loadPluginMetadataFromEvent = async (
 };
 
 const loadRawMetadata = async (
-  plugin: Contract,
+  plugin: ContractType,
   metadataHash: string
 ): Promise<string> => {
   const [type, source] = await plugin.metadataProvider();
-  switch (type) {
-    case ProviderType_Contract:
-      return loadPluginMetadataFromContract(
-        AbiCoder.defaultAbiCoder().decode(["address"], source)[0],
-        metadataHash
-      );
-    case ProviderType_Event:
-      return loadPluginMetadataFromEvent(
-        AbiCoder.defaultAbiCoder().decode(["address"], source)[0],
-        metadataHash
-      );
-    default:
-      throw Error("Unsupported MetadataProviderType");
+
+  console.log("type", Number(type));
+
+  if (ProviderType_Contract === Number(type)) {
+    return loadPluginMetadataFromContract(
+      defaultAbiCoder.decode(["address"], source)[0],
+      metadataHash
+    );
+  } else if (ProviderType_Event === Number(type)) {
+    return loadPluginMetadataFromEvent(
+      defaultAbiCoder.decode(["address"], source)[0],
+      metadataHash
+    );
+  } else {
+    throw Error("Unsupported MetadataProviderType");
   }
+  // switch (type) {
+  //   case ethers.BigNumber.from(ProviderType_Contract):
+  //     return loadPluginMetadataFromContract(
+  //       defaultAbiCoder.decode(["address"], source)[0],
+  //       metadataHash
+  //     );
+  //   case ethers.BigNumber.from(ProviderType_Event):
+  //     return loadPluginMetadataFromEvent(
+  //       defaultAbiCoder.decode(["address"], source)[0],
+  //       metadataHash
+  //     );
+  //   default:
+  //     throw Error("Unsupported MetadataProviderType");
+  // }
 };
 
 const parseAppUrl = (rawUrl: string, pluginAddress: string | undefined) => {
@@ -131,10 +150,7 @@ export const decodePluginMetadata = (
   const format = data.slice(2, 6);
   if (format !== "0000") throw Error("Unsupported format or format version");
   const metadata = data.slice(6);
-  const decoded = AbiCoder.defaultAbiCoder().decode(
-    PluginMetadataType,
-    "0x" + metadata
-  );
+  const decoded = defaultAbiCoder.decode(PluginMetadataType, "0x" + metadata);
 
   console.log("decoded", decoded);
   // return {
@@ -160,11 +176,14 @@ export const decodePluginMetadata = (
 };
 
 export const loadPluginMetadata = async (
-  plugin: Contract
+  plugin: ContractType
 ): Promise<PluginMetadata> => {
+  console.log("pluginAddress", plugin.address);
   const metadataHash = await plugin.metadataHash();
+
+  console.log("metadataHash", metadataHash);
   const metadata = await loadRawMetadata(plugin, metadataHash);
   if (metadataHash !== keccak256(metadata))
     throw Error("Invalid metadata retrieved!");
-  return decodePluginMetadata(metadata, await plugin.getAddress());
+  return decodePluginMetadata(metadata, plugin.address);
 };

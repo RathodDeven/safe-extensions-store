@@ -1,7 +1,8 @@
 // TODO: switch to api-kit once Ethers v6 is supported
-import { getAddress, BigNumberish } from "ethers";
+import { BigNumberish } from "ethers";
 import axios from "axios";
 import { TX_SERVICE_URL } from "./constants";
+import { getAddress } from "@ethersproject/address";
 
 export type Page<T> = {
   readonly count: number;

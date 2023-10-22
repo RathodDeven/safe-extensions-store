@@ -1,11 +1,7 @@
-import { Interface, ethers } from "ethers";
-import {
-  getConnectedProvider,
-  getConnectedSigner,
-  getJsonProvider,
-  getProvider,
-} from "./web3";
+import { ethers } from "ethers";
+import { getConnectedSigner, getJsonProvider, getProvider } from "./web3";
 import { deployedContracts } from "./contract-info/deployment";
+const { Interface } = ethers.utils;
 
 const Metadata_PROVIDER_ABI = [
   "function retrieveMetadata(bytes32 metadataHash) external view returns (bytes metadata)",
@@ -32,6 +28,7 @@ export const getRegistryFromJsonProvider = async () => {
 
 export const getRegistryFromConnectedProvider = async () => {
   const signer = await getConnectedSigner();
+  if (!signer) throw new Error("No signer");
   const registryInfo =
     deployedContracts[84531][0].contracts.TestSafeProtocolRegistryUnrestricted;
   return new ethers.Contract(registryInfo.address, registryInfo.abi, signer);

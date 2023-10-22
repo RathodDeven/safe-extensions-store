@@ -35,7 +35,9 @@ export const getSafeAppsProvider = async () => {
   const info = await getSafeInfo();
   if (info.chainId !== Number(PROTOCOL_CHAIN_ID))
     throw Error("Unsupported chain");
-  return new ethers.BrowserProvider(new SafeAppProvider(info, safeAppsSDK));
+  return new ethers.providers.Web3Provider(
+    new SafeAppProvider(info, safeAppsSDK)
+  );
 };
 
 export const submitTxs = async (txs: BaseTransaction[]): Promise<string> => {
