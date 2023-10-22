@@ -1,7 +1,8 @@
 import clsx from "clsx";
 import { Link, useLocation } from "react-router-dom";
-import { publicFileUrl } from "../logic/utils";
+import { formatAddress, publicFileUrl } from "../logic/utils";
 import { useUser } from "./wrapper/UserProvider";
+import getStampFyiURL from "../logic/getStampFyiURL";
 const Header = () => {
   const { pathname } = useLocation();
   const { address, isOwnerOfRegistry } = useUser();
@@ -60,8 +61,12 @@ const Header = () => {
 
         {address && (
           <div className="text-s-text font-semibold text-lg">
-            {address.slice(0, 6)}...{address.slice(-4)}
+            {formatAddress(address)}
           </div>
+        )}
+
+        {address && (
+          <img src={getStampFyiURL(address)} className="w-8 h-8 rounded-full" />
         )}
       </div>
     </header>
