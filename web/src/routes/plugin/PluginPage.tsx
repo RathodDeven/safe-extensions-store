@@ -197,7 +197,10 @@ const PluginPage = () => {
           {details?.metadata?.requiredPermissions &&
             getListOfPermission(details?.metadata?.requiredPermissions).map(
               (permission) => (
-                <div className="rounded-md bg-t-bg px-2 py-1 border-s-text/10 shadow-xl border">
+                <div
+                  key={permission}
+                  className="rounded-md bg-t-bg px-2 py-1 border-s-text/10 shadow-xl border"
+                >
                   {permission}
                 </div>
               )
@@ -212,7 +215,11 @@ const PluginPage = () => {
         )}
       >
         {details?.metadata?.ssUrls?.map((url) => (
-          <ImageWithPulsingLoader src={url} className="h-[350px] rounded-xl" />
+          <ImageWithPulsingLoader
+            key={url}
+            src={url}
+            className="h-[350px] rounded-xl"
+          />
         ))}
       </div>
 
@@ -328,12 +335,25 @@ const PluginPage = () => {
                       const timestamp = Date.now();
                       // logic of submiting review to tableland review table
 
-                      const { meta: insert } = await db
-                        .prepare(
-                          `INSERT INTO ${REVIEW_TABLE_ID} (review, plugin_address, ratings, author, timestamp) VALUES (?, ?, ?, ?, ?);`
-                        )
-                        .bind(review, pluginAddress, rating, address, timestamp)
-                        .run();
+                      const { meta: insert } = await toast.promise(
+                        db
+                          .prepare(
+                            `INSERT INTO ${REVIEW_TABLE_ID} (review, plugin_address, ratings, author, timestamp) VALUES (?, ?, ?, ?, ?);`
+                          )
+                          .bind(
+                            review,
+                            pluginAddress,
+                            rating,
+                            address,
+                            timestamp
+                          )
+                          .run(),
+                        {
+                          error: "Error submiting review",
+                          success: "Review submitted successfully",
+                          pending: "Submitting review",
+                        }
+                      );
 
                       console.log("insert", insert);
 

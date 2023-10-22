@@ -70,7 +70,10 @@ export const Plugin: FunctionComponent<PluginProps> = ({ address }) => {
           {details?.metadata?.requiredPermissions &&
             getListOfPermission(details?.metadata?.requiredPermissions!).map(
               (permission) => (
-                <div className="rounded-md bg-t-bg px-2 py-1 border-s-text/10 shadow-xl border">
+                <div
+                  key={permission}
+                  className="rounded-md bg-t-bg px-2 py-1 border-s-text/10 shadow-xl border"
+                >
                   {permission}
                 </div>
               )

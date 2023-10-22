@@ -25,8 +25,9 @@ root.render(
       <UserProvider>
         <LexicalWrapper>
           <ToastContainer
-            position="bottom-right"
+            position="top-right"
             theme="dark"
+            autoClose={3000}
             closeButton={false}
           />
           <div className="w-screen h-screen overflow-auto bg-p-bg text-p-text hide-scrollbar">

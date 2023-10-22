@@ -27,7 +27,6 @@ export const loadPluginDetails = async (
 ): Promise<PluginDetails> => {
   const plugin = await getPlugin(pluginAddress);
   const metadata = await loadPluginMetadata(plugin);
-  console.log("metadata", metadata);
   if (!(await isConnectedToSafe())) return { metadata };
   const enabled = await isPluginEnabled(pluginAddress);
   return { metadata, enabled };
@@ -44,8 +43,6 @@ export const loadPluginsOfIntegrations = async (
     11218388,
     "latest"
   )) as ethers.providers.Log[];
-
-  console.log("addedEvents", addedEvents);
 
   const addedModules = addedEvents.map(
     // @ts-ignore
@@ -78,8 +75,6 @@ export const loadPlugins = async (
     11130728,
     "latest"
   )) as EventLog[];
-
-  console.log("addedEvents", addedEvents);
 
   // @ts-ignore
   const addedModules = addedEvents.map((event: EventLog) => event.args.module);
@@ -148,7 +143,6 @@ const buildEnablePlugin = async (
     ).data,
   };
 
-  console.log("buildEnablePlugin tx", tx);
   return tx;
 };
 
@@ -190,7 +184,6 @@ export const deployPlugin = async ({
   );
   await contract.waitForDeployment();
   const pluginAddress = contract.address;
-  console.log("pluginAddress", pluginAddress);
 
   return pluginAddress;
 };
@@ -206,7 +199,6 @@ const buildAddModule = async (
     data: (await registry.addModule.populateTransaction(module, moduleType))
       .data,
   };
-  console.log("buildAddModule tx", tx);
   return tx;
 };
 
@@ -240,7 +232,6 @@ const buildFlagModule = async (pluginAddress: string) => {
     value: "0",
     data: (await registry.flagModule.populateTransaction(pluginAddress)).data,
   };
-  console.log("buildFlagModule tx", tx);
   return tx;
 };
 

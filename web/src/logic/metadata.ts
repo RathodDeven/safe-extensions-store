@@ -82,7 +82,6 @@ const loadPluginMetadataFromEvent = async (
     address: provider,
     topics: eventInterface.encodeFilterTopics("Metadata", [metadataHash]),
   });
-  console.log("events", events);
   if (events.length === 0) throw Error("Metadata not found");
   const metadataEvent = events[events.length - 1];
   const decodedEvent = eventInterface.decodeEventLog(
@@ -98,8 +97,6 @@ const loadRawMetadata = async (
   metadataHash: string
 ): Promise<string> => {
   const [type, source] = await plugin.metadataProvider();
-
-  console.log("type", Number(type));
 
   if (ProviderType_Contract === Number(type)) {
     return loadPluginMetadataFromContract(
@@ -145,14 +142,12 @@ export const decodePluginMetadata = (
   data: string,
   pluginAddress?: string
 ): PluginMetadata => {
-  console.log("data", data);
   if (!isHexString(data)) throw Error("Invalid data format");
   const format = data.slice(2, 6);
   if (format !== "0000") throw Error("Unsupported format or format version");
   const metadata = data.slice(6);
   const decoded = defaultAbiCoder.decode(PluginMetadataType, "0x" + metadata);
 
-  console.log("decoded", decoded);
   // return {
   //   name: decoded[0],
   //   version: decoded[1],
@@ -178,10 +173,8 @@ export const decodePluginMetadata = (
 export const loadPluginMetadata = async (
   plugin: ContractType
 ): Promise<PluginMetadata> => {
-  console.log("pluginAddress", plugin.address);
   const metadataHash = await plugin.metadataHash();
 
-  console.log("metadataHash", metadataHash);
   const metadata = await loadRawMetadata(plugin, metadataHash);
   if (metadataHash !== keccak256(metadata))
     throw Error("Invalid metadata retrieved!");
