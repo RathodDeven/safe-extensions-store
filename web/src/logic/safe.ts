@@ -41,7 +41,7 @@ export const buildEnableModule = async (
   return {
     to: safeAddress,
     value: "0",
-    data: (await safe.enableModule.populateTransaction(module)).data,
+    data: (await safe.populateTransaction.enableModule(module)).data!,
   };
 };
 
@@ -99,7 +99,7 @@ const getExecuteTxData = async (
   const safe = await getSafe(safeTx.safe);
   console.log(safeTx);
   return (
-    await safe.execTransaction.populateTransaction(
+    await safe.populateTransaction.execTransaction(
       safeTx.to,
       safeTx.value,
       safeTx.data || "0x",
