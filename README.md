@@ -9,5 +9,6 @@ A marketplace of plugins for your safe smart accounts.
 - Allow updating the plugin page with new plugin address, and info.
 - An update section to see the plugins that got updated, where one can remove the old version of the plugin and add the new updated one.
 - An admin section as an option, to accept and allow only accepted modules to be listed
+- Ability to price modules (plugins, hooks, etc), could be one time payment or subscription based
 - Make sections for hooks and functions for safe accounts
 
